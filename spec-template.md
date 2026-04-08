@@ -1,6 +1,11 @@
 # SPEC — AI Product Hackathon
 
 **Nhóm: 6** ___
+Vương Hoàng Giang - 2A202600349
+Dương Quang Đông - 2A202600445
+Phạm Anh Dũng - 2A202600251
+Nguyễn Lê Trung - 2A202600174
+
 **Track:** ☑ VinFast · ☐ Vinmec · ☐ VinUni-VinSchool · ☐ XanhSM · ☐ Open
 **Problem statement (1 câu):** *Mẹ bầu khó tìm và hiểu các chính sách thai sản/phí dịch vụ của Vinmec → hiện phải gọi hotline hoặc đọc tài liệu dài → AI chatbot giúp trả lời nhanh, cá nhân hoá, 24/7.*
 
