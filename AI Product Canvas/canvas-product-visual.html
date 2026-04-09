@@ -1,0 +1,860 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Product Canvas - Vinmec Maternity Chatbot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f2ea;
+    --paper: rgba(255, 252, 247, 0.9);
+    --panel: #fffdf9;
+    --ink: #1f1a17;
+    --muted: #6c625a;
+    --line: rgba(76, 61, 48, 0.12);
+    --shadow: 0 24px 70px rgba(70, 45, 24, 0.12);
+    --value: #d66a34;
+    --trust: #2e7a94;
+    --feasibility: #3b7b4f;
+    --learn: #8f5cf2;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Be Vietnam Pro", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at top left, rgba(214, 106, 52, 0.18), transparent 32%),
+      radial-gradient(circle at top right, rgba(46, 122, 148, 0.14), transparent 28%),
+      radial-gradient(circle at bottom left, rgba(143, 92, 242, 0.12), transparent 24%),
+      linear-gradient(180deg, #f9f3ec 0%, #f3ece4 100%);
+  }
+
+  body::before,
+  body::after {
+    content: "";
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    filter: blur(8px);
+  }
+
+  body::before {
+    top: 6vh;
+    right: 4vw;
+    width: 22rem;
+    height: 22rem;
+    border-radius: 44% 56% 61% 39% / 42% 34% 66% 58%;
+    background: rgba(214, 106, 52, 0.08);
+  }
+
+  body::after {
+    bottom: 4vh;
+    left: 3vw;
+    width: 18rem;
+    height: 18rem;
+    border-radius: 50%;
+    background: rgba(46, 122, 148, 0.08);
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    width: min(1380px, calc(100vw - 32px));
+    margin: 24px auto;
+    padding: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    border-radius: 28px;
+    background: var(--paper);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px);
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.8fr);
+    gap: 20px;
+    align-items: stretch;
+    margin-bottom: 20px;
+  }
+
+  .hero-main,
+  .hero-side,
+  .card,
+  .mini-card,
+  .signal-card {
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: #fffdf9;
+  }
+
+  .hero-main {
+    padding: 28px;
+    background: linear-gradient(135deg, rgba(255, 247, 239, 0.96), rgba(255, 253, 249, 0.96));
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-main::after {
+    content: "";
+    position: absolute;
+    inset: auto -30px -60px auto;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(214, 106, 52, 0.12), transparent 68%);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(214, 106, 52, 0.18);
+    color: #8b4f2e;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    margin: 16px 0 12px;
+    font-family: "Fraunces", serif;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 0.96;
+    letter-spacing: -0.04em;
+  }
+
+  .hero h1 span {
+    display: block;
+    color: var(--value);
+  }
+
+  .hero p {
+    margin: 0;
+    max-width: 62ch;
+    color: var(--muted);
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .hero-metrics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+  }
+
+  .metric {
+    min-width: 148px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(76, 61, 48, 0.1);
+  }
+
+  .metric .label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+  }
+
+  .metric strong {
+    font-size: 24px;
+    line-height: 1.1;
+  }
+
+  .hero-side {
+    padding: 22px;
+    background: linear-gradient(180deg, rgba(247, 244, 255, 0.96), rgba(255, 255, 255, 0.94));
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .section-kicker {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--learn);
+  }
+
+  .switch {
+    display: grid;
+    gap: 12px;
+  }
+
+  .switch-row {
+    display: grid;
+    grid-template-columns: 18px auto;
+    gap: 12px;
+    align-items: start;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.84);
+    color: var(--muted);
+  }
+
+  .switch-row strong {
+    display: block;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .switch-row.active {
+    border-color: rgba(143, 92, 242, 0.34);
+    background: linear-gradient(135deg, rgba(143, 92, 242, 0.12), rgba(255, 255, 255, 0.96));
+    color: var(--ink);
+  }
+
+  .switch-box {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: 2px solid currentColor;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    margin-top: 2px;
+  }
+
+  .switch-row.active .switch-box {
+    background: var(--learn);
+    border-color: var(--learn);
+    color: #fff;
+  }
+
+  .switch-row.active .switch-box::before {
+    content: "✓";
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  .hero-note {
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px dashed rgba(143, 92, 242, 0.32);
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .hero-note strong {
+    color: var(--ink);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 20px;
+    align-items: start;
+  }
+
+  .grid > .card.value,
+  .grid > .card.trust,
+  .grid > .card.feasibility {
+    grid-column: span 2;
+  }
+
+  .grid > .card.learn,
+  .grid > .card.flywheel {
+    grid-column: span 3;
+  }
+
+  .card {
+    padding: 22px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    border-radius: 24px;
+  }
+
+  .card.value::before {
+    background: linear-gradient(180deg, var(--value), #efb493);
+  }
+
+  .card.trust::before {
+    background: linear-gradient(180deg, var(--trust), #a2d5e4);
+  }
+
+  .card.feasibility::before {
+    background: linear-gradient(180deg, var(--feasibility), #a8d1b1);
+  }
+
+  .card.learn::before,
+  .card.flywheel::before {
+    background: linear-gradient(180deg, var(--learn), #c8b5fb);
+  }
+
+  .card-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid transparent;
+  }
+
+  .pill.value {
+    color: #8f4c2b;
+    background: rgba(214, 106, 52, 0.12);
+    border-color: rgba(214, 106, 52, 0.2);
+  }
+
+  .pill.trust {
+    color: #215d72;
+    background: rgba(46, 122, 148, 0.12);
+    border-color: rgba(46, 122, 148, 0.2);
+  }
+
+  .pill.feasibility {
+    color: #2a5d39;
+    background: rgba(59, 123, 79, 0.12);
+    border-color: rgba(59, 123, 79, 0.2);
+  }
+
+  .pill.learn {
+    color: #6e42ca;
+    background: rgba(143, 92, 242, 0.12);
+    border-color: rgba(143, 92, 242, 0.2);
+  }
+
+  .guide {
+    margin: 0 0 18px;
+    padding-left: 16px;
+    border-left: 2px solid rgba(76, 61, 48, 0.12);
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .lead {
+    margin: 0 0 18px;
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    background: #fff;
+    border: 1px solid var(--line);
+  }
+
+  .mini-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .mini-card {
+    padding: 16px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(249,244,238,0.92));
+  }
+
+  .mini-card h3 {
+    margin: 0 0 6px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .mini-card p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 18px 0;
+  }
+
+  .stat-box {
+    padding: 18px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(245,250,246,0.96));
+    border: 1px solid rgba(59, 123, 79, 0.14);
+  }
+
+  .stat-box .value {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 28px;
+    line-height: 1;
+    font-weight: 800;
+    color: var(--feasibility);
+  }
+
+  .stat-box .desc {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .risk-note {
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(59, 123, 79, 0.08), rgba(255,255,255,0.98));
+    border: 1px solid rgba(59, 123, 79, 0.12);
+    line-height: 1.7;
+  }
+
+  .signal-stack {
+    display: grid;
+    gap: 14px;
+  }
+
+  .signal-card {
+    padding: 18px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,245,255,0.94));
+  }
+
+  .signal-index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    background: rgba(143, 92, 242, 0.12);
+    color: var(--learn);
+    font-weight: 800;
+  }
+
+  .signal-card h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+  }
+
+  .signal-card p,
+  .signal-card li {
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  .signal-card ul {
+    margin: 12px 0 0;
+    padding-left: 18px;
+  }
+
+  .checklist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .check-item {
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+
+  .check-item.active {
+    border-color: rgba(143, 92, 242, 0.24);
+    background: rgba(143, 92, 242, 0.12);
+    color: #643dbe;
+  }
+
+  .flow {
+    display: grid;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .flow-step {
+    position: relative;
+    padding: 16px 18px 16px 56px;
+    border-radius: 18px;
+    border: 1px solid rgba(143, 92, 242, 0.14);
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,245,255,0.95));
+  }
+
+  .flow-step::before {
+    content: attr(data-step);
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    background: rgba(143, 92, 242, 0.14);
+    color: var(--learn);
+    font-weight: 800;
+    font-size: 13px;
+  }
+
+  .flow-step strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 15px;
+  }
+
+  .refresh {
+    margin-top: 16px;
+    padding: 16px 18px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(143, 92, 242, 0.12), rgba(255,255,255,0.95));
+    color: #5933af;
+    font-weight: 700;
+    line-height: 1.6;
+  }
+
+  .footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+    padding: 18px 22px 0;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  @media (max-width: 1180px) {
+    .hero,
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .grid > .card.value,
+    .grid > .card.trust,
+    .grid > .card.feasibility,
+    .grid > .card.learn,
+    .grid > .card.flywheel {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .page {
+      width: min(100vw - 16px, 100%);
+      margin: 8px auto;
+      padding: 14px;
+      border-radius: 20px;
+    }
+
+    .hero-main,
+    .hero-side,
+    .card {
+      padding: 18px;
+      border-radius: 20px;
+    }
+
+    .hero h1 {
+      font-size: 38px;
+    }
+
+    .mini-grid,
+    .stats {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <section class="hero">
+      <div class="hero-main">
+        <div class="eyebrow">AI Product Canvas</div>
+        <h1>Vinmec <span>Maternity Chatbot</span></h1>
+        <p>
+          Chatbot tư vấn cho mẹ bầu và gia đình về gói thai sản, bảo hiểm và lịch khám của Vinmec.
+          Mục tiêu là thay thế hành vi phải gọi hotline hoặc tự dò website bằng trải nghiệm trả lời tức thì,
+          có nguồn tham chiếu và cá nhân hóa theo tuần thai.
+        </p>
+
+        <div class="hero-metrics">
+          <div class="metric">
+            <span class="label">Thời gian tiết kiệm</span>
+            <strong>20-40 phút</strong>
+          </div>
+          <div class="metric">
+            <span class="label">Latency mục tiêu</span>
+            <strong>&lt; 3 giây</strong>
+          </div>
+          <div class="metric">
+            <span class="label">Chi phí / query</span>
+            <strong>$0.005-0.02</strong>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-side">
+        <div class="section-kicker">Automation hay Augmentation</div>
+        <div class="switch">
+          <div class="switch-row">
+            <span class="switch-box"></span>
+            <div>
+              <strong>Automation</strong>
+              <span>AI làm thay, user không can thiệp</span>
+            </div>
+          </div>
+          <div class="switch-row active">
+            <span class="switch-box"></span>
+            <div>
+              <strong>Augmentation</strong>
+              <span>AI gợi ý, user vẫn quyết định cuối cùng</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-note">
+          <strong>Lý do chọn augmentation:</strong> chatbot chỉ tư vấn, không thay thế quyết định của mẹ bầu
+          hoặc nhân viên y tế. Khi câu trả lời có rủi ro hoặc không khớp nhu cầu thực tế, người dùng luôn có
+          lối thoát sang nhân viên Vinmec. Trong healthcare, cost of wrong answer là rất cao.
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <article class="card value">
+        <div class="card-header">
+          <h2 class="card-title">Value</h2>
+          <div class="pill value">User problem -> AI value</div>
+        </div>
+        <p class="guide">User nào? Pain gì? AI giải quyết gì mà cách hiện tại không giải quyết được?</p>
+        <p class="lead">
+          <strong>Mẹ bầu và gia đình</strong> đang mất 20-40 phút mỗi lần để tìm thông tin về gói thai sản,
+          bảo hiểm hoặc lịch khám. Quy trình hiện tại phụ thuộc vào hotline hoặc website nhiều tầng, nên chậm,
+          lặp lại và thiếu cá nhân hóa.
+        </p>
+
+        <div class="mini-grid">
+          <div class="mini-card">
+            <h3>Pain hiện tại</h3>
+            <p>Phải gọi hotline hoặc tự dò website để tìm đúng chính sách, quyền lợi và lịch phù hợp.</p>
+          </div>
+          <div class="mini-card">
+            <h3>Giá trị AI</h3>
+            <p>Trả lời tức thì, cá nhân hóa theo tuần thai và giảm tải cho các câu hỏi lặp lại thường gặp.</p>
+          </div>
+        </div>
+
+        <div class="chips">
+          <span class="chip">Tư vấn 24/7</span>
+          <span class="chip">Cá nhân hóa theo tuần thai</span>
+          <span class="chip">Giảm tải hotline</span>
+        </div>
+      </article>
+
+      <article class="card trust">
+        <div class="card-header">
+          <h2 class="card-title">Trust</h2>
+          <div class="pill trust">Guardrail for wrong answers</div>
+        </div>
+        <p class="guide">Khi AI sai thì user bị ảnh hưởng thế nào? User biết AI sai bằng cách nào? User sửa bằng cách nào?</p>
+        <p class="lead">
+          Nếu AI trả lời sai chính sách, người dùng thường nhận ra khi thông tin không khớp với nhu cầu thực tế
+          hoặc với kỳ vọng về quyền lợi dịch vụ. Vì vậy, mỗi câu trả lời phải đi kèm cơ chế kiểm chứng và lối thoát rõ ràng.
+        </p>
+
+        <div class="mini-grid">
+          <div class="mini-card">
+            <h3>Cách user kiểm chứng</h3>
+            <p>Nút “Xem nguồn” giúp đối chiếu trực tiếp với nội dung từ Vinmec.</p>
+          </div>
+          <div class="mini-card">
+            <h3>Cách user sửa sai</h3>
+            <p>Nút “Hỏi nhân viên” và feedback 👍/👎 để escalate chỉ trong 1 click.</p>
+          </div>
+        </div>
+
+        <div class="chips">
+          <span class="chip">Xem nguồn</span>
+          <span class="chip">Escalate sang nhân viên</span>
+          <span class="chip">Feedback loop</span>
+        </div>
+      </article>
+
+      <article class="card feasibility">
+        <div class="card-header">
+          <h2 class="card-title">Feasibility</h2>
+          <div class="pill feasibility">Cost, latency, risk</div>
+        </div>
+        <p class="guide">Cost bao nhiêu mỗi request? Latency bao lâu? Risk chính là gì?</p>
+
+        <div class="stats">
+          <div class="stat-box">
+            <span class="value">$0.005-0.02</span>
+            <div class="desc">Ước tính chi phí cho mỗi query.</div>
+          </div>
+          <div class="stat-box">
+            <span class="value">&lt; 3s</span>
+            <div class="desc">Mốc trải nghiệm cần giữ để thay thế hotline cho FAQ.</div>
+          </div>
+        </div>
+
+        <div class="risk-note">
+          <strong>Rủi ro chính:</strong> câu trả lời bị outdated khi Vinmec thay đổi chính sách nhưng knowledge base chưa cập nhật.
+          <br>
+          <strong>Cách kiểm soát:</strong> dùng RAG trên knowledge base Vinmec và review/cập nhật định kỳ tối thiểu 2 tuần một lần,
+          hoặc ngay khi có thay đổi chính sách.
+        </div>
+
+        <div class="chips">
+          <span class="chip">RAG trên KB Vinmec</span>
+          <span class="chip">Risk: outdated policy</span>
+          <span class="chip">Mitigation: review 2 tuần/lần</span>
+        </div>
+      </article>
+
+      <article class="card learn">
+        <div class="card-header">
+          <h2 class="card-title">Learning Signal</h2>
+          <div class="pill learn">Thu tín hiệu để tốt lên</div>
+        </div>
+
+        <div class="signal-stack">
+          <section class="signal-card">
+            <div class="signal-index">01</div>
+            <h3>User correction đi vào đâu?</h3>
+            <p>
+              Feedback 👍/👎 và hành động “Hỏi nhân viên” sẽ được ghi vào correction log, sau đó nhân viên Vinmec
+              review và validate định kỳ để cập nhật knowledge base.
+            </p>
+          </section>
+
+          <section class="signal-card">
+            <div class="signal-index">02</div>
+            <h3>Làm sao biết sản phẩm tốt lên hay tệ đi?</h3>
+            <ul>
+              <li><strong>Implicit:</strong> tỷ lệ hỏi lại cùng câu, escalation rate.</li>
+              <li><strong>Explicit:</strong> CSAT sau mỗi session, phản hồi 👎 theo từng query.</li>
+              <li><strong>Mở rộng:</strong> tỷ lệ câu hỏi out-of-scope để biết KB cần bổ sung gì.</li>
+            </ul>
+          </section>
+
+          <section class="signal-card">
+            <div class="signal-index">03</div>
+            <h3>Data type và marginal value</h3>
+            <div class="checklist">
+              <span class="check-item active">User-specific</span>
+              <span class="check-item active">Domain-specific</span>
+              <span class="check-item active">Human-judgment</span>
+              <span class="check-item">Real-time</span>
+            </div>
+            <p>
+              Dữ liệu có marginal value vì chính sách gói thai sản, bảo hiểm và lịch khám của Vinmec là proprietary.
+              Model nền không biết sẵn và đối thủ cũng không dễ thu được tập dữ liệu tương tự.
+            </p>
+          </section>
+        </div>
+      </article>
+
+      <article class="card flywheel">
+        <div class="card-header">
+          <h2 class="card-title">Data Flywheel</h2>
+          <div class="pill learn">Closed-loop improvement</div>
+        </div>
+        <p class="guide">
+          User questions + feedback + escalation -> nhân viên label -> update KB -> tăng accuracy -> giảm escalation.
+        </p>
+
+        <div class="flow">
+          <div class="flow-step" data-step="1">
+            <strong>Input</strong>
+            User hỏi, để lại feedback và tạo escalation khi chatbot không đủ chắc chắn.
+          </div>
+          <div class="flow-step" data-step="2">
+            <strong>Review & validate</strong>
+            Nhân viên Vinmec kiểm tra các case sai, thiếu hoặc ngoài phạm vi.
+          </div>
+          <div class="flow-step" data-step="3">
+            <strong>Update KB + retrieval</strong>
+            Cập nhật knowledge base và điều chỉnh retrieval/prompt theo lỗi thực tế.
+          </div>
+          <div class="flow-step" data-step="4">
+            <strong>Improve outcome</strong>
+            Tăng accuracy, giảm escalation rate và tiếp tục tạo dữ liệu tốt hơn cho vòng sau.
+          </div>
+        </div>
+
+        <div class="refresh">
+          Chu kỳ cập nhật tối thiểu: <strong>2 tuần / lần</strong><br>
+          Cập nhật sớm hơn ngay khi có thay đổi chính sách từ Vinmec.
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer">
+      <span><strong>Vinmec x AI Product Canvas</strong> · Hypothesis v1.0</span>
+      <span>Đánh dấu các giả định chưa được validate với user thực tế.</span>
+      <span>2026</span>
+    </footer>
+  </div>
+</body>
+</html>
