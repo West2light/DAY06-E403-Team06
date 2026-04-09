@@ -2,3 +2,4 @@
 __pychache__/
 venv/
 backend/feedback_log.jsonl
+backend/__pycache__/
