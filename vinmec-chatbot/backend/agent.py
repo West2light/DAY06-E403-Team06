@@ -36,10 +36,7 @@ DEFAULT_NO_SOURCE_OPTIONS = [
 WELCOME_QUICK_REPLIES = [
     "💰 Gói 27 tuần giá bao nhiêu?",
     "📦 So sánh gói 27 và 36 tuần",
-    "🏥 Chi phí sinh thường bao nhiêu?",
-    "🔪 Chi phí sinh mổ lần 2?",
-    "🎁 Ưu đãi tháng 4 có gì?",
-    "🔒 Bảo hiểm AIA được bảo lãnh không?",
+    "📅 Đặt lịch tư vấn",
 ]
 
 # ---------------------------------------------------------------------------
