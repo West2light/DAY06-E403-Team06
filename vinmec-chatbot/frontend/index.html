@@ -421,6 +421,7 @@ let sessionId  = localStorage.getItem('vinmec_session') || newId();
 let chatOpen   = false;
 let isFullscreen = false;
 let isBusy     = false;
+let lastUserMessage = '';
 
 localStorage.setItem('vinmec_session', sessionId);
 function newId() { return 'sess_' + Math.random().toString(36).slice(2, 11); }
@@ -752,6 +753,7 @@ async function sendMessage() {
   const text  = input.value.trim();
   if (!text) return;
 
+  lastUserMessage = text;
   input.value = '';
   autoResize(input);
   appendUserMsg(text);
@@ -814,6 +816,12 @@ function renderBot(msg) {
   const anchor = document.getElementById('scrollAnchor');
   const wrap   = document.createElement('div');
   wrap.className = 'msg bot';
+  const feedbackContext = msg.has_feedback ? {
+    user_question: lastUserMessage,
+    assistant_answer: [msg.text, msg.extra_text].filter(Boolean).join('\n\n'),
+    policy_tags: Array.isArray(msg.policy_tags) ? msg.policy_tags : [],
+    assistant_type: msg.type || 'normal',
+  } : null;
 
   const typeClass = {
     success: 'bot success', warning: 'bot warning',
@@ -863,7 +871,7 @@ function renderBot(msg) {
   }
 
   if (msg.has_feedback) {
-    html += `<div class="feedback-row">
+    html += `<div class="feedback-row" data-feedback="${escAttr(JSON.stringify(feedbackContext))}">
       <span class="feedback-lbl">Thông tin có hữu ích không?</span>
       <button class="fb-btn" data-fb="good">👍 Đúng</button>
       <button class="fb-btn wrong" data-fb="bad">👎 Sai</button>
@@ -943,20 +951,63 @@ function ctaClick(label) {
   scrollBottom();
 }
 
-function feedback(good, btn) {
+async function feedback(good, btn) {
   const row = btn.closest('.feedback-row');
   if (!row) return;
-  if (good) {
-    row.innerHTML = '<span style="color:#16a34a;font-size:11.5px">✅ Cảm ơn phản hồi của chị!</span>';
-  } else {
-    row.innerHTML = '<span style="color:#dc2626;font-size:11.5px">📝 Đã ghi nhận – nhân viên sẽ review KB</span>';
-    renderBot({
-      type: 'log',
-      text: 'Cảm ơn chị đã phản hồi! Em đã ghi nhận.',
-      log_details: 'Phản hồi của chị sẽ được nhân viên Vinmec xem xét và cập nhật Knowledge Base.',
-      cta: { primary: '👩‍💼 Kết nối tư vấn viên', secondary: '📞 Gọi hotline' },
+  if (row.dataset.sent === '1') return;
+
+  row.dataset.sent = '1';
+  row.querySelectorAll('button').forEach(el => { el.disabled = true; });
+
+  let ctx = {};
+  try {
+    ctx = JSON.parse(row.dataset.feedback || '{}');
+  } catch {
+    ctx = {};
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/api/feedback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id: sessionId,
+        feedback_type: good ? 'good' : 'bad',
+        feedback_text: good
+          ? 'Người dùng bấm nút Đúng trên câu trả lời của chatbot.'
+          : 'Người dùng bấm nút Sai và yêu cầu review lại câu trả lời.',
+        user_question: ctx.user_question || '',
+        assistant_answer: ctx.assistant_answer || '',
+        policy_tags: Array.isArray(ctx.policy_tags) ? ctx.policy_tags : [],
+        metadata: {
+          assistant_type: ctx.assistant_type || '',
+        },
+      }),
     });
-    scrollBottom();
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ detail: 'Không ghi được feedback.' }));
+      throw new Error(err.detail || `HTTP ${res.status}`);
+    }
+
+    if (good) {
+      row.innerHTML = '<span style="color:#16a34a;font-size:11.5px">✅ Cảm ơn phản hồi của chị!</span>';
+      showToast('Đã ghi nhận phản hồi', 'ok');
+    } else {
+      row.innerHTML = '<span style="color:#dc2626;font-size:11.5px">📝 Đã ghi nhận – nhân viên sẽ review KB</span>';
+      renderBot({
+        type: 'log',
+        text: 'Cảm ơn chị đã phản hồi! Em đã ghi nhận.',
+        log_details: 'Phản hồi của chị sẽ được nhân viên Vinmec xem xét và cập nhật Knowledge Base.',
+        cta: { primary: '👩‍💼 Kết nối tư vấn viên', secondary: '📞 Gọi hotline' },
+      });
+      showToast('Đã lưu feedback để review', 'ok');
+      scrollBottom();
+    }
+  } catch (err) {
+    row.dataset.sent = '0';
+    row.querySelectorAll('button').forEach(el => { el.disabled = false; });
+    showToast(String(err.message || 'Không ghi được feedback'), 'err');
   }
 }
 

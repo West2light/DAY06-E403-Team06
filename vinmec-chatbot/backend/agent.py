@@ -58,10 +58,14 @@ class VinmecAgent:
         self.client = OpenAI(api_key=api_key)
         self.model = model
         self.conversation: list[dict] = []
+        self.last_user_message = ""
+        self.last_response_payload: dict = {}
 
     def reset(self):
         """Xoá lịch sử hội thoại."""
         self.conversation.clear()
+        self.last_user_message = ""
+        self.last_response_payload = {}
 
     def get_welcome_message(self) -> dict:
         """Trả về tin nhắn chào hỏi khi bắt đầu phiên."""
@@ -79,6 +83,8 @@ class VinmecAgent:
         """
         Nhận tin nhắn người dùng, chạy agent loop, trả về response dict.
         """
+        self.last_user_message = user_message
+
         # Thêm user message vào history
         self.conversation.append({"role": "user", "content": user_message})
 
@@ -134,14 +140,18 @@ class VinmecAgent:
             })
 
             # Đảm bảo các field mặc định
-            return self._postprocess(result_dict)
+            processed = self._postprocess(result_dict)
+            self.last_response_payload = dict(processed)
+            return processed
 
         # Nếu hết iterations mà chưa trả lời
-        return {
+        fallback = {
             "type": "warning",
             "text": "⚠️ Em chưa thể xử lý câu hỏi này. Vui lòng thử lại hoặc liên hệ tư vấn viên.",
             "no_source_options": DEFAULT_NO_SOURCE_OPTIONS,
         }
+        self.last_response_payload = dict(fallback)
+        return fallback
 
     def _postprocess(self, data: dict) -> dict:
         """Chuẩn hoá và điền giá trị mặc định cho response."""

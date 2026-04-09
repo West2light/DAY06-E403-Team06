@@ -17,6 +17,7 @@ from pydantic import BaseModel, Field
 from dotenv import load_dotenv
 
 from agent import VinmecAgent
+from tools import append_feedback_log
 
 load_dotenv()
 
@@ -101,6 +102,17 @@ class BookingRequest(BaseModel):
     note: str = ""     # chủ đề tư vấn (tuỳ chọn)
 
 
+class FeedbackRequest(BaseModel):
+    session_id: str
+    feedback_type: str = "bad"
+    feedback_text: str = ""
+    user_question: str = ""
+    assistant_answer: str = ""
+    policy_tags: list[str] = Field(default_factory=list)
+    metadata: dict = Field(default_factory=dict)
+    model: str = DEFAULT_MODEL
+
+
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
@@ -165,6 +177,57 @@ async def reset_session(req: ResetRequest):
     if req.session_id in SESSIONS:
         SESSIONS[req.session_id].reset()
     return {"status": "ok", "session_id": req.session_id}
+
+
+@app.post("/api/feedback")
+async def log_feedback(req: FeedbackRequest):
+    """Lưu feedback người dùng vào feedback_log.jsonl."""
+    agent = SESSIONS.get(req.session_id)
+
+    user_question = req.user_question.strip()
+    if not user_question and agent:
+        user_question = agent.last_user_message
+
+    assistant_answer = req.assistant_answer.strip()
+    if not assistant_answer and agent:
+        assistant_answer = str(agent.last_response_payload.get("text", "")).strip()
+
+    policy_tags = req.policy_tags
+    if not policy_tags and agent:
+        policy_tags = list(agent.last_response_payload.get("policy_tags", []) or [])
+
+    metadata = dict(req.metadata)
+    if agent:
+        metadata.setdefault("assistant_type", agent.last_response_payload.get("type", ""))
+
+    feedback_text = req.feedback_text.strip()
+    if not feedback_text:
+        feedback_text = (
+            "Người dùng xác nhận câu trả lời hữu ích."
+            if req.feedback_type == "good"
+            else "Người dùng báo thông tin sai, thiếu hoặc cần kiểm tra lại."
+        )
+
+    if not user_question and not assistant_answer:
+        raise HTTPException(status_code=400, detail="Không có đủ context để ghi feedback.")
+
+    record = append_feedback_log(
+        session_id=req.session_id,
+        user_question=user_question,
+        assistant_answer=assistant_answer,
+        feedback_text=feedback_text,
+        feedback_type=req.feedback_type,
+        policy_tags=policy_tags,
+        model=agent.model if agent else req.model,
+        source="api",
+        metadata=metadata,
+    )
+
+    return {
+        "status": "ok",
+        "feedback_type": record["feedback_type"],
+        "timestamp": record["timestamp"],
+    }
 
 
 @app.delete("/api/session/{session_id}")

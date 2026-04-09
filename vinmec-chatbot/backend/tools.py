@@ -3,6 +3,11 @@ tools.py
 Định nghĩa OpenAI function-calling tools và hàm thực thi tương ứng.
 """
 
+import json
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
 from knowledge_base import (
     search_policies,
     search_faqs,
@@ -10,6 +15,9 @@ from knowledge_base import (
     format_policies_for_prompt,
     format_faqs_for_prompt,
 )
+
+BASE_DIR = Path(__file__).resolve().parent
+FEEDBACK_LOG_PATH = BASE_DIR / "feedback_log.jsonl"
 
 # ---------------------------------------------------------------------------
 # Tool schemas (OpenAI function definitions)
@@ -88,6 +96,34 @@ TOOL_DEFINITIONS = [
             },
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "log_user_feedback",
+            "description": (
+                "Ghi nhận feedback khi người dùng báo thông tin sai, thiếu, hoặc cần "
+                "được đội ngũ xem lại. Luôn gọi tool này trước khi trả về phản hồi type='log'."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "user_question": {
+                        "type": "string",
+                        "description": "Câu hỏi gần nhất của người dùng.",
+                    },
+                    "assistant_answer": {
+                        "type": "string",
+                        "description": "Câu trả lời mà chatbot đã đưa ra.",
+                    },
+                    "feedback_text": {
+                        "type": "string",
+                        "description": "Mô tả ngắn gọn feedback của người dùng.",
+                    },
+                },
+                "required": ["user_question", "assistant_answer", "feedback_text"],
+            },
+        },
+    },
 ]
 
 # ---------------------------------------------------------------------------
@@ -118,8 +154,43 @@ def execute_tool(tool_name: str, tool_args: dict) -> str:
         return _get_policy_detail(**tool_args)
     elif tool_name == "classify_request_scope":
         return _classify_request_scope(**tool_args)
+    elif tool_name == "log_user_feedback":
+        return _log_user_feedback(**tool_args)
     else:
         return f"[ERROR] Tool không tồn tại: {tool_name}"
+
+
+def append_feedback_log(
+    *,
+    session_id: str = "",
+    user_question: str,
+    assistant_answer: str,
+    feedback_text: str,
+    feedback_type: str = "bad",
+    policy_tags: list[str] | None = None,
+    model: str = "",
+    source: str = "tool",
+    metadata: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Append feedback record vào file jsonl để review sau."""
+    record = {
+        "timestamp": datetime.now().isoformat(timespec="seconds"),
+        "session_id": session_id,
+        "user_question": user_question,
+        "assistant_answer": assistant_answer,
+        "feedback_text": feedback_text,
+        "feedback_type": feedback_type,
+        "policy_tags": policy_tags or [],
+        "model": model,
+        "source": source,
+        "status": "pending_review",
+        "metadata": metadata or {},
+    }
+
+    with FEEDBACK_LOG_PATH.open("a", encoding="utf-8") as f:
+        f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+    return record
 
 
 def _search_knowledge_base(query: str, top_k: int = 4) -> str:
@@ -181,3 +252,18 @@ def _classify_request_scope(text: str) -> str:
             return "SCOPE: in_scope\nLý do: Câu hỏi liên quan đến dịch vụ thai sản/y tế Vinmec."
 
     return "SCOPE: ambiguous\nLý do: Chưa rõ phạm vi, nên hỏi thêm thông tin."
+
+
+def _log_user_feedback(user_question: str, assistant_answer: str, feedback_text: str) -> str:
+    record = append_feedback_log(
+        user_question=user_question,
+        assistant_answer=assistant_answer,
+        feedback_text=feedback_text,
+        feedback_type="bad",
+        source="tool",
+    )
+    return (
+        "Đã ghi nhận feedback với trạng thái pending_review.\n"
+        f"timestamp={record['timestamp']}\n"
+        "recommended_action=Thông báo người dùng rằng đội ngũ sẽ kiểm tra lại nội dung."
+    )
