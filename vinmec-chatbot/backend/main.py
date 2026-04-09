@@ -5,7 +5,10 @@ FastAPI server cho Vinmec Maternity Chatbot.
 
 import os
 import uuid
+import json
+from datetime import datetime
 from contextlib import asynccontextmanager
+from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -89,6 +92,15 @@ class WelcomeRequest(BaseModel):
     model: str = DEFAULT_MODEL
 
 
+class BookingRequest(BaseModel):
+    session_id: str
+    name: str
+    dob: str           # ngày sinh, VD: "01/01/1995"
+    phone: str
+    facility: str      # cơ sở chọn
+    note: str = ""     # chủ đề tư vấn (tuỳ chọn)
+
+
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
@@ -160,6 +172,49 @@ async def delete_session(session_id: str):
     """Xoá hoàn toàn một session."""
     SESSIONS.pop(session_id, None)
     return {"status": "ok"}
+
+
+@app.post("/api/booking")
+async def create_booking(req: BookingRequest):
+    """Lưu lịch tư vấn vào file bookings.json."""
+    record = {
+        "id": str(uuid.uuid4())[:8],
+        "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "session_id": req.session_id,
+        "name": req.name,
+        "dob": req.dob,
+        "phone": req.phone,
+        "facility": req.facility,
+        "note": req.note,
+        "status": "pending",
+    }
+
+    bookings_file = Path(__file__).parent / "bookings.json"
+    bookings: list = []
+    if bookings_file.exists():
+        try:
+            bookings = json.loads(bookings_file.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            bookings = []
+
+    bookings.append(record)
+    bookings_file.write_text(
+        json.dumps(bookings, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+    print(f"📅 Booking mới: {record['name']} | {record['facility']} | {record['phone']}")
+    return {"status": "ok", "booking_id": record["id"]}
+
+
+@app.get("/api/bookings")
+async def list_bookings():
+    """Xem danh sách lịch đặt (admin)."""
+    bookings_file = Path(__file__).parent / "bookings.json"
+    if not bookings_file.exists():
+        return {"count": 0, "bookings": []}
+    bookings = json.loads(bookings_file.read_text(encoding="utf-8"))
+    return {"count": len(bookings), "bookings": bookings}
 
 
 @app.get("/api/sessions")
