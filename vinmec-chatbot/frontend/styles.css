@@ -226,6 +226,14 @@ nav a:hover, nav a.active { color: var(--teal); border-bottom-color: var(--teal)
 
 .booking-input:focus { border-color: #0ea5e9; }
 .booking-input::placeholder { color: var(--gray-400); }
+.booking-input.error { border-color: var(--red); }
+.booking-error {
+  color: var(--red);
+  font-size: 11.5px;
+  margin-top: 4px;
+  display: none;
+}
+.booking-error.visible { display: block; }
 .booking-next-btn {
   margin-top: 7px;
   background: #0ea5e9; color: white;
