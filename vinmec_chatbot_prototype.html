@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinmec Healthcare System</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #00748a;
+    --teal-dark: #00536e;
+    --teal-light: #e0f4f7;
+    --gold: #c8972b;
+    --green: #2eaa6e;
+    --red: #e03e3e;
+    --orange: #f07c20;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-400: #94a3b8;
+    --gray-600: #475569;
+    --gray-800: #1e293b;
+    --white: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Be Vietnam Pro', sans-serif; background: #f1f5f9; color: var(--gray-800); }
+
+  /* ====== HEADER ====== */
+  .top-bar {
+    background: var(--teal-dark);
+    color: white; font-size: 12.5px;
+    display: flex; justify-content: flex-end; gap: 24px; padding: 6px 40px;
+  }
+  .top-bar a { color: #bfe8f0; text-decoration: none; }
+  .top-bar a:hover { color: white; }
+
+  .main-header {
+    background: white;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 40px; border-bottom: 1px solid var(--gray-200);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+  }
+  .logo { display: flex; flex-direction: column; align-items: flex-start; gap: 0; }
+  .logo-text { font-size: 22px; font-weight: 700; color: var(--teal-dark); letter-spacing: 1px; }
+  .logo-sub { font-size: 8px; color: var(--gold); letter-spacing: 2px; font-weight: 600; }
+  .logo-bird { font-size: 20px; color: var(--gold); margin-right: 4px; }
+
+  .search-bar {
+    display: flex; align-items: center; gap: 8px;
+    border: 1.5px solid var(--gray-200); border-radius: 24px;
+    padding: 7px 16px; background: var(--gray-50); width: 280px;
+    font-size: 13px; color: var(--gray-400);
+  }
+  .header-actions { display: flex; align-items: center; gap: 14px; }
+  .btn-calendar {
+    border: 1.5px solid var(--teal); color: var(--teal);
+    border-radius: 8px; padding: 7px 14px; font-size: 12.5px; font-weight: 600;
+    cursor: pointer; background: white; display: flex; align-items: center; gap: 6px;
+  }
+  .flag-badge {
+    background: var(--gray-100); border-radius: 6px; padding: 5px 8px; font-size: 13px;
+  }
+
+  nav {
+    background: white; border-bottom: 1px solid var(--gray-100);
+    display: flex; justify-content: center; gap: 36px; padding: 0 40px;
+  }
+  nav a {
+    color: var(--gray-600); text-decoration: none; font-size: 13.5px; font-weight: 500;
+    padding: 14px 0; border-bottom: 2.5px solid transparent;
+    transition: all 0.2s;
+  }
+  nav a:hover, nav a.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+  /* ====== HERO ====== */
+  .hero {
+    background: linear-gradient(135deg, #fce8f0 0%, #f8d7e8 30%, #fde8d4 65%, #e8f4f8 100%);
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    min-height: 360px; position: relative; overflow: hidden;
+    padding: 0 40px;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center; gap: 18px;
+    padding: 40px 0;
+  }
+  .hero-left h1 { font-size: 32px; font-weight: 700; color: var(--gray-800); line-height: 1.3; }
+  .btn-more {
+    display: inline-block; background: var(--green); color: white;
+    border-radius: 24px; padding: 11px 28px; font-weight: 600; font-size: 14px;
+    border: none; cursor: pointer; width: fit-content;
+  }
+  .hero-center {
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .hero-img-placeholder {
+    width: 220px; height: 260px;
+    background: linear-gradient(160deg, #f8b4cc, #f5d0be);
+    border-radius: 50% 50% 48% 52% / 60% 60% 40% 40%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 90px; box-shadow: 0 8px 32px rgba(200,80,120,0.18);
+  }
+  .heart { position: absolute; font-size: 22px; animation: float 3s ease-in-out infinite; }
+  .heart:nth-child(1) { top: 40px; left: 30px; animation-delay: 0s; }
+  .heart:nth-child(2) { top: 60px; right: 20px; animation-delay: 1s; }
+  .heart:nth-child(3) { bottom: 60px; left: 20px; animation-delay: 2s; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+  .hero-right {
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+    padding: 30px 20px;
+  }
+  .vinmec-badge {
+    background: white; border-radius: 12px; padding: 16px 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%;
+  }
+  .vinmec-badge-title { font-size: 20px; font-weight: 800; color: var(--teal-dark); letter-spacing: 1px; }
+  .vinmec-badge-sub { font-size: 9px; color: var(--gold); letter-spacing: 2px; font-weight: 600; }
+  .promo-text {
+    font-family: Georgia, serif; font-style: italic;
+    font-size: 28px; color: #d4507a; font-weight: 700;
+    margin-top: 8px; line-height: 1.2;
+  }
+  .promo-sub { font-size: 14px; color: var(--teal); font-weight: 600; margin-top: 4px; }
+  .btn-consult {
+    margin-top: 12px; background: var(--teal-dark); color: white;
+    border: none; border-radius: 20px; padding: 10px 20px;
+    font-size: 12px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px;
+  }
+
+  /* Quick actions bar */
+  .quick-actions {
+    background: white; display: grid; grid-template-columns: repeat(3,1fr);
+    border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+    margin: -28px 40px 0; position: relative; z-index: 10; overflow: hidden;
+    border: 1px solid var(--gray-100);
+  }
+  .qa-item {
+    display: flex; align-items: flex-start; gap: 14px; padding: 20px 24px;
+    border-right: 1px solid var(--gray-100); cursor: pointer; transition: background 0.2s;
+  }
+  .qa-item:last-child { border-right: none; }
+  .qa-item:hover { background: var(--teal-light); }
+  .qa-icon { font-size: 22px; margin-top: 2px; color: var(--teal); }
+  .qa-title { font-size: 14px; font-weight: 700; color: var(--gray-800); }
+  .qa-sub { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+  /* ====== CONTENT ====== */
+  .content-section { padding: 60px 40px 40px; max-width: 1200px; margin: 0 auto; }
+  .section-title { font-size: 22px; font-weight: 700; color: var(--gray-800); margin-bottom: 6px; }
+  .section-underline { width: 40px; height: 3px; background: var(--teal); border-radius: 2px; margin-bottom: 32px; }
+
+  /* ====== CHATBOT BUTTON ====== */
+  .chatbot-fab {
+    position: fixed; bottom: 28px; right: 28px; z-index: 1000;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+  }
+  .chatbot-tooltip {
+    background: var(--gray-800); color: white; font-size: 12px; font-weight: 500;
+    padding: 8px 14px; border-radius: 20px; white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease;
+  }
+  .chatbot-btn {
+    width: 58px; height: 58px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+    border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 26px; box-shadow: 0 4px 20px rgba(0,116,138,0.4);
+    transition: transform 0.2s; position: relative;
+  }
+  .chatbot-btn:hover { transform: scale(1.08); }
+  .chatbot-ping {
+    position: absolute; top: -2px; right: -2px;
+    width: 14px; height: 14px; background: var(--red); border-radius: 50%;
+    border: 2px solid white;
+    animation: ping 1.5s ease-in-out infinite;
+  }
+  @keyframes ping { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:0.7} }
+
+  /* ====== CHATBOT WINDOW ====== */
+  .chatbot-window {
+    position: fixed; bottom: 100px; right: 28px; z-index: 999;
+    width: 390px; height: 620px;
+    background: white; border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18), 0 4px 20px rgba(0,116,138,0.15);
+    display: flex; flex-direction: column; overflow: hidden;
+    display: none; /* hidden by default */
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  /* Chat header */
+  .chat-header {
+    background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+    padding: 16px 20px; display: flex; align-items: center; gap: 12px;
+    color: white;
+  }
+  .chat-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4);
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+    flex-shrink: 0;
+  }
+  .chat-header-info h3 { font-size: 14px; font-weight: 700; }
+  .chat-header-info p { font-size: 11.5px; opacity: 0.85; margin-top: 1px; }
+  .chat-status { display: flex; align-items: center; gap: 5px; font-size: 11px; opacity: 0.9; margin-top: 2px; }
+  .status-dot { width: 7px; height: 7px; background: #4ade80; border-radius: 50%; }
+  .chat-close {
+    margin-left: auto; background: rgba(255,255,255,0.15); border: none; color: white;
+    width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .chat-close:hover { background: rgba(255,255,255,0.3); }
+
+  /* Chat topic badge */
+  .chat-topic-bar {
+    background: var(--teal-light); padding: 8px 16px;
+    display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #c8e9ef;
+  }
+  .topic-badge {
+    background: var(--teal); color: white; font-size: 10.5px; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px;
+  }
+  .topic-label { font-size: 11.5px; color: var(--teal-dark); font-weight: 500; }
+
+  /* Messages area */
+  .chat-messages {
+    flex: 1; overflow-y: auto; padding: 16px 14px; display: flex; flex-direction: column; gap: 10px;
+    background: #f8fbfc;
+  }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 4px; }
+
+  /* Message bubbles */
+  .msg { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; }
+  .msg.bot { justify-content: flex-start; }
+  .msg.user { justify-content: flex-end; }
+
+  .msg-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0; margin-bottom: 2px;
+  }
+
+  .bubble {
+    max-width: 82%; padding: 10px 14px; border-radius: 16px; font-size: 13px; line-height: 1.55;
+  }
+  .bubble.bot {
+    background: white; color: var(--gray-800);
+    border: 1px solid var(--gray-200); border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .bubble.user {
+    background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+    color: white; border-bottom-right-radius: 4px;
+  }
+
+  /* Special bubble types */
+  .bubble.warning {
+    background: #fff7ed; border-color: #fed7aa; border-left: 3px solid var(--orange);
+  }
+  .bubble.redirect {
+    background: #fef2f2; border-color: #fecaca; border-left: 3px solid var(--red);
+  }
+  .bubble.success {
+    background: #f0fdf4; border-color: #bbf7d0; border-left: 3px solid var(--green);
+  }
+
+  .bubble-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 5px; opacity: 0.7;
+  }
+  .bubble.warning .bubble-label { color: var(--orange); }
+  .bubble.redirect .bubble-label { color: var(--red); }
+  .bubble.success .bubble-label { color: var(--green); }
+
+  /* Policy tag */
+  .policy-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--teal-light); color: var(--teal-dark);
+    font-size: 10.5px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+    margin-top: 6px; margin-right: 4px;
+  }
+
+  /* Price highlight */
+  .price-highlight {
+    background: linear-gradient(135deg, #00748a15, #00536e10);
+    border: 1px solid #00748a30; border-radius: 10px;
+    padding: 10px 12px; margin-top: 8px;
+  }
+  .price-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; }
+  .price-label { font-size: 12px; color: var(--gray-600); }
+  .price-val { font-size: 13px; font-weight: 700; color: var(--teal-dark); }
+
+  /* Quick replies */
+  .quick-replies {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+  }
+  .qr-btn {
+    background: white; border: 1.5px solid var(--teal); color: var(--teal);
+    border-radius: 16px; padding: 5px 12px; font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s; font-family: inherit;
+  }
+  .qr-btn:hover { background: var(--teal); color: white; }
+
+  /* CTA buttons in chat */
+  .chat-cta {
+    display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;
+  }
+  .cta-primary {
+    background: var(--teal-dark); color: white; border: none;
+    border-radius: 12px; padding: 8px 14px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px;
+  }
+  .cta-secondary {
+    background: white; color: var(--teal); border: 1.5px solid var(--teal);
+    border-radius: 12px; padding: 8px 14px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px;
+  }
+
+  /* Feedback row */
+  .feedback-row {
+    display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px;
+    border-top: 1px solid var(--gray-100);
+  }
+  .feedback-label { font-size: 11px; color: var(--gray-400); }
+  .fb-btn {
+    background: none; border: 1px solid var(--gray-200); border-radius: 8px;
+    padding: 3px 10px; font-size: 12px; cursor: pointer; transition: all 0.15s;
+  }
+  .fb-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .fb-btn.wrong:hover { border-color: var(--red); color: var(--red); }
+
+  /* Typing indicator */
+  .typing-indicator { display: flex; align-items: center; gap: 4px; padding: 10px 14px; }
+  .typing-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--gray-400);
+    animation: typing 1.2s ease-in-out infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing { 0%,100%{transform:translateY(0);opacity:0.5} 50%{transform:translateY(-5px);opacity:1} }
+
+  /* Timestamp */
+  .msg-time { font-size: 10px; color: var(--gray-400); margin-top: 3px; text-align: center; width: 100%; }
+
+  /* Clarify prompt */
+  .clarify-form { background: #f8f3ff; border: 1px solid #e0d4fc; border-radius: 12px; padding: 12px; margin-top: 8px; }
+  .clarify-form label { font-size: 11.5px; color: #5b21b6; font-weight: 600; display: block; margin-bottom: 6px; }
+  .clarify-options { display: flex; flex-direction: column; gap: 5px; }
+  .clarify-opt {
+    background: white; border: 1.5px solid #c4b5fd; color: #5b21b6;
+    border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 500;
+    cursor: pointer; text-align: left; font-family: inherit; transition: all 0.15s;
+  }
+  .clarify-opt:hover { background: #5b21b6; color: white; border-color: #5b21b6; }
+
+  /* Log notification */
+  .log-notice {
+    background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px;
+    padding: 10px 12px; margin-top: 6px; font-size: 11.5px; color: #9a3412;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .log-notice-icon { font-size: 14px; flex-shrink: 0; }
+
+  /* Input area */
+  .chat-input-area {
+    padding: 12px 14px; background: white; border-top: 1px solid var(--gray-100);
+    display: flex; gap: 8px; align-items: flex-end;
+  }
+  .chat-input {
+    flex: 1; border: 1.5px solid var(--gray-200); border-radius: 20px;
+    padding: 9px 16px; font-size: 13px; font-family: inherit;
+    outline: none; resize: none; max-height: 80px; min-height: 38px;
+    transition: border-color 0.2s; line-height: 1.4;
+  }
+  .chat-input:focus { border-color: var(--teal); }
+  .send-btn {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--teal); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 16px; flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .send-btn:hover { background: var(--teal-dark); }
+  .send-btn:disabled { background: var(--gray-200); cursor: not-allowed; }
+
+  /* Chat footer */
+  .chat-footer {
+    background: var(--gray-50); padding: 6px 14px;
+    font-size: 10px; color: var(--gray-400); text-align: center;
+    border-top: 1px solid var(--gray-100);
+  }
+
+  /* Scenario switcher (demo UX) */
+  .demo-switcher {
+    position: fixed; top: 50%; left: 14px; transform: translateY(-50%);
+    z-index: 998; display: flex; flex-direction: column; gap: 6px;
+  }
+  .demo-label {
+    font-size: 9px; font-weight: 700; color: var(--gray-400); text-transform: uppercase;
+    letter-spacing: 1px; text-align: center; margin-bottom: 2px;
+  }
+  .demo-btn {
+    width: 38px; height: 38px; border-radius: 10px; border: 1.5px solid var(--gray-200);
+    background: white; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08); transition: all 0.15s;
+    title: "";
+  }
+  .demo-btn:hover, .demo-btn.active { border-color: var(--teal); background: var(--teal-light); }
+  .demo-btn-label {
+    font-size: 9px; color: var(--gray-400); text-align: center; width: 44px;
+    margin-left: -3px; line-height: 1.2;
+  }
+
+  /* Scroll to bottom */
+  .scroll-anchor { height: 1px; }
+
+  /* Responsive */
+  @media(max-width:600px){
+    .chatbot-window{width:calc(100vw - 20px);right:10px;}
+    .demo-switcher{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PAGE LAYOUT ===== -->
+<div class="top-bar">
+  <a href="#">Tìm bác sĩ</a>
+  <a href="#">Chăm sóc khách hàng</a>
+</div>
+
+<header class="main-header">
+  <div class="logo" style="display:flex;flex-direction:row;align-items:center;gap:6px;">
+    <span class="logo-bird">🦅</span>
+    <div>
+      <div class="logo-text">VINMEC</div>
+      <div class="logo-sub">HEALTHCARE SYSTEM</div>
+    </div>
+  </div>
+  <div class="search-bar">
+    <span>🔍</span> Tìm kiếm...
+  </div>
+  <div class="header-actions">
+    <button class="btn-calendar">📅 Đặt lịch</button>
+    <div class="flag-badge">🇻🇳 ▾</div>
+  </div>
+</header>
+
+<nav>
+  <a href="#">Chuyên khoa</a>
+  <a href="#" class="active">Hướng dẫn khách hàng</a>
+  <a href="#">Phát triển bền vững</a>
+  <a href="#">Về Vinmec</a>
+  <a href="#">Chuyên trang sức khỏe</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <h1>Chăm sóc bằng tài năng,<br>y đức và sự thấu cảm</h1>
+    <button class="btn-more">Xem thêm</button>
+  </div>
+  <div class="hero-center">
+    <div style="position:relative">
+      <div class="hero-img-placeholder">👩‍🍼</div>
+      <span class="heart">💗</span>
+      <span class="heart">💖</span>
+      <span class="heart">💝</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="vinmec-badge">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="color:var(--gold);font-size:18px;">🦅</span>
+        <div>
+          <div class="vinmec-badge-title">VINMEC</div>
+          <div class="vinmec-badge-sub">HEALTHCARE SYSTEM</div>
+        </div>
+      </div>
+      <div class="promo-text">Ở cữ An nhiên</div>
+      <div class="promo-sub">Mẹ khỏe, bé ngoan</div>
+      <button class="btn-consult">NHẬN TƯ VẤN NGAY</button>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK ACTIONS -->
+<div class="quick-actions">
+  <div class="qa-item">
+    <div class="qa-icon">📞</div>
+    <div>
+      <div class="qa-title">Gọi tổng đài</div>
+      <div class="qa-sub">Tư vấn và giải đáp các vấn đề của bạn</div>
+    </div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-icon">📅</div>
+    <div>
+      <div class="qa-title">Đặt Lịch Hẹn</div>
+      <div class="qa-sub">Đặt lịch hẹn nhanh chóng, tiện lợi</div>
+    </div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-icon">👨‍⚕️</div>
+    <div>
+      <div class="qa-title">Tìm bác sĩ</div>
+      <div class="qa-sub">Tìm kiếm thông tin chuyên gia y tế Vinmec nhanh chóng</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content-section">
+  <h2 class="section-title">Tại sao nên chọn Vinmec?</h2>
+  <div class="section-underline"></div>
+  <p style="color:var(--gray-400);font-size:13.5px;max-width:600px;">
+    Vinmec là hệ thống y tế đa chuyên khoa với đội ngũ bác sĩ giỏi, trang thiết bị hiện đại và dịch vụ chăm sóc toàn diện.
+    Khám phá các gói thai sản được thiết kế riêng cho mẹ bầu Việt Nam.
+  </p>
+</div>
+
+<!-- ===== DEMO SCENARIO SWITCHER ===== -->
+<div class="demo-switcher">
+  <div class="demo-label">Demo</div>
+  <button class="demo-btn active" onclick="loadScenario('in_scope')" title="Câu hỏi đúng phạm vi">✅
+    <div class="demo-btn-label" style="display:none"></div>
+  </button>
+  <button class="demo-btn" onclick="loadScenario('clarify')" title="Câu hỏi mơ hồ cần làm rõ">❓</button>
+  <button class="demo-btn" onclick="loadScenario('out_of_scope')" title="Câu hỏi ngoài phạm vi">🚫</button>
+  <button class="demo-btn" onclick="loadScenario('no_source')" title="Không có nguồn chính thức">⚠️</button>
+  <button class="demo-btn" onclick="loadScenario('feedback')" title="Phản hồi sai → ghi log">📝</button>
+</div>
+
+<!-- ===== CHATBOT FAB ===== -->
+<div class="chatbot-fab">
+  <div class="chatbot-tooltip" id="chatTooltip">💬 Hỏi về gói thai sản</div>
+  <button class="chatbot-btn" id="chatBtn" onclick="toggleChat()">
+    💬
+    <div class="chatbot-ping"></div>
+  </button>
+</div>
+
+<!-- ===== CHATBOT WINDOW ===== -->
+<div class="chatbot-window" id="chatWindow">
+  <div class="chat-header">
+    <div class="chat-avatar">🤖</div>
+    <div class="chat-header-info">
+      <h3>Trợ lý Thai Sản Vinmec</h3>
+      <div class="chat-status">
+        <div class="status-dot"></div>
+        Đang hoạt động · Trả lời trong vài giây
+      </div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+
+  <div class="chat-topic-bar">
+    <div class="topic-badge">🤰 Thai Sản</div>
+    <div class="topic-label">Chính sách gói sinh · Giá · Quyền lợi · Bảo hiểm</div>
+  </div>
+
+  <div class="chat-messages" id="chatMessages">
+    <!-- Messages injected by JS -->
+    <div class="scroll-anchor" id="scrollAnchor"></div>
+  </div>
+
+  <div class="chat-input-area">
+    <textarea class="chat-input" id="chatInput" placeholder="Nhập câu hỏi của bạn..." rows="1"
+      onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+  </div>
+  <div class="chat-footer">
+    🔒 Thông tin từ Knowledge Base chính thức · Dữ liệu demo
+  </div>
+</div>
+
+<script>
+// ===== KNOWLEDGE BASE =====
+const KB = {
+  policies: {
+    P001:{title:"Quà tặng mẹ và bé khi sinh tại bệnh viện",summary:"Khách hàng sinh tại bệnh viện được tặng bộ quà mẹ và bé.",details:"Bộ quà thường gồm khăn, bỉm sơ sinh, quần áo sơ sinh, chăn ủ. Thành phần không cố định và có thể thay đổi theo từng cơ sở.",conditions:["Áp dụng cho ca sinh hoàn tất tại bệnh viện"],price_info:null,escalation:false},
+    P002:{title:"Đăng ký gói sinh",summary:"Khách hàng có thể đăng ký gói sinh trước ngày dự sinh.",details:"Có thể đăng ký ở mốc 27 tuần hoặc 36 tuần. Không bắt buộc mua gói – khách hàng vẫn có thể sinh không có gói.",price_info:{package_27w_from:28500000,package_36w_from:18500000},escalation:false},
+    P003:{title:"Gói sinh 27 tuần và 36 tuần",summary:"Hai gói thai sản với phạm vi dịch vụ khác nhau.",details:"Gói 27 tuần: theo dõi từ tam cá nguyệt III sớm, khám thai định kỳ, xét nghiệm cơ bản, quyền lợi sinh. Gói 36 tuần: phù hợp đăng ký gần ngày sinh, tập trung hồ sơ nhập viện và quyền lợi sinh cơ bản.",price_info:{package_27w_from:28500000,package_36w_from:18500000},escalation:false},
+    P004:{title:"Chi phí sinh thường",summary:"Sinh thường ước tính 18–32 triệu đồng.",price_info:{from:18000000,to:32000000},escalation:false},
+    P005:{title:"Chi phí sinh mổ và phụ thu ngày lễ",summary:"Sinh mổ 32–52 triệu; lần 2: 38–60 triệu; phụ thu ngày lễ 10–20%.",price_info:{c_section_from:32000000,c_section_to:52000000,repeat_from:38000000,repeat_to:60000000,holiday_surcharge_from:10,holiday_surcharge_to:20},escalation:true},
+    P006:{title:"Sinh không mua gói",summary:"Vẫn có thể sinh tại bệnh viện, tạm ứng 10–20 triệu tùy loại sinh.",price_info:{deposit_normal:10000000,deposit_csection:20000000},escalation:false},
+    P009:{title:"Bảo hiểm và đồng chi trả",summary:"Hỗ trợ bảo lãnh bảo hiểm AIA và đối tác; phần ngoài quyền lợi khách hàng tự chi trả.",escalation:true},
+    P012:{title:"Ưu đãi tháng 4",summary:"Giảm 5–8% hoặc quà tặng bổ sung khi đăng ký gói trong tháng 4.",price_info:{discount_from:5,discount_to:8},escalation:true},
+  },
+  faqs: [
+    {id:"F003",q:"sinh mổ lần 2",intent:"c_section_cost",policies:["P005"]},
+    {id:"F007",q:"gói sinh sài gòn giá bao nhiêu",intent:"maternity_price",policies:["P002","P003"]},
+    {id:"F008",q:"đẻ thường bao nhiêu tiền",intent:"normal_delivery",policies:["P004"]},
+    {id:"F011",q:"ưu đãi tháng 4",intent:"promotion",policies:["P012"]},
+    {id:"F014",q:"gói 27 tuần ưu đãi",intent:"package_promo",policies:["P003","P012"]},
+    {id:"F006",q:"bảo hiểm aia",intent:"insurance",policies:["P009"]},
+    {id:"F002",q:"không mua gói sinh",intent:"non_package",policies:["P002","P006"]},
+    {id:"F001",q:"quà tặng mẹ bé",intent:"gift",policies:["P001"]},
+  ]
+};
+
+// ===== SCENARIO DEFINITIONS =====
+const SCENARIOS = {
+  in_scope: {
+    label: "✅ Đúng phạm vi",
+    messages: [
+      {role:"time",text:"Hôm nay, 09:30"},
+      {role:"bot",type:"normal",text:"Xin chào! Tôi là trợ lý tư vấn gói thai sản Vinmec. 🤰\n\nBạn cần hỗ trợ về <b>gói thai sản, giá, quyền lợi, điều kiện đăng ký</b> hay <b>bảo hiểm</b> không?",
+        quickReplies:["💰 Gói 27 tuần giá bao nhiêu?","📦 So sánh 27 vs 36 tuần","🏥 Gói sinh thường bao nhiêu?","🎁 Ưu đãi tháng 4"]},
+      {role:"user",text:"Gói sinh 27 tuần giá bao nhiêu và bao gồm những gì vậy?"},
+      {role:"bot",type:"thinking"},
+      {role:"bot",type:"success",
+        text:"Dựa trên chính sách chính thức của Vinmec, đây là thông tin gói <b>27 tuần</b>:",
+        policyTags:["P003","P002"],
+        priceTable:{rows:[
+          {label:"Gói 27 tuần (từ)",val:"28.500.000 đ"},
+          {label:"Gói 36 tuần (từ)",val:"18.500.000 đ"},
+        ]},
+        extraText:"<b>Quyền lợi gói 27 tuần gồm:</b><br>• Khám thai định kỳ theo lịch<br>• Xét nghiệm cơ bản thai kỳ<br>• Tư vấn bác sĩ sản<br>• Quyền lợi sinh theo gói<br><br><i>⚠️ Lưu ý: Giá thực tế có thể thay đổi theo cơ sở và thời điểm đăng ký.</i>",
+        cta:{primary:"📅 Đặt lịch tư vấn",secondary:"📋 Xem chi tiết gói"},
+        hasFeedback:true
+      }
+    ]
+  },
+  clarify: {
+    label: "❓ Làm rõ câu hỏi",
+    messages: [
+      {role:"time",text:"Hôm nay, 10:15"},
+      {role:"bot",type:"normal",text:"Xin chào! Tôi là trợ lý tư vấn gói thai sản Vinmec. 🤰\n\nBạn cần hỗ trợ về gói thai sản, giá hay quyền lợi?"},
+      {role:"user",text:"Tôi muốn hỏi về gói sinh"},
+      {role:"bot",type:"clarify",
+        text:"Câu hỏi của bạn còn khá rộng – để tôi tư vấn chính xác hơn, bạn có thể cho biết thêm:",
+        clarifyOptions:[
+          "🗓️ Tôi đang ở tuần thai thứ 27 trở lên",
+          "📅 Tôi đang ở tuần 36 trở lên",
+          "💰 Tôi muốn so sánh giá 2 gói",
+          "🏥 Tôi chưa quyết định cơ sở"
+        ]
+      },
+      {role:"user",text:"Tôi đang ở tuần 28, muốn xem gói 27 tuần"},
+      {role:"bot",type:"thinking"},
+      {role:"bot",type:"success",
+        text:"Với tuần thai <b>28</b>, gói <b>27 tuần</b> là lựa chọn phù hợp để bắt đầu theo dõi từ tam cá nguyệt III.",
+        policyTags:["P003"],
+        priceTable:{rows:[
+          {label:"Gói 27 tuần (từ)",val:"28.500.000 đ"},
+          {label:"Tháng 4 – ưu đãi thêm",val:"– 5% đến 8%"},
+        ]},
+        extraText:"Bạn có muốn tôi kiểm tra thêm ưu đãi đang áp dụng trong tháng này không?",
+        cta:{primary:"📅 Đặt lịch tư vấn",secondary:"🎁 Xem ưu đãi tháng 4"},
+        hasFeedback:true
+      }
+    ]
+  },
+  out_of_scope: {
+    label: "🚫 Ngoài phạm vi",
+    messages: [
+      {role:"time",text:"Hôm nay, 11:00"},
+      {role:"bot",type:"normal",text:"Xin chào! Tôi là trợ lý tư vấn gói thai sản Vinmec. 🤰\n\nBạn cần hỗ trợ gì về chính sách thai sản?"},
+      {role:"user",text:"Em đang tuần 32, bị đau bụng dưới và ra dịch, có nguy hiểm không ạ?"},
+      {role:"bot",type:"thinking"},
+      {role:"bot",type:"redirect",
+        text:"⚠️ <b>Đây là câu hỏi y tế chuyên môn – ngoài phạm vi của chatbot thai sản này.</b>\n\nTôi không thể tư vấn về triệu chứng lâm sàng vì có thể gây rủi ro nếu thông tin không chính xác.",
+        redirectOptions:[
+          {icon:"📞",label:"Gọi hotline Vinmec",sub:"1900 232 389 – 24/7"},
+          {icon:"👨‍⚕️",label:"Đặt lịch khám bác sĩ",sub:"Bác sĩ sản khoa sẽ tư vấn trực tiếp"},
+          {icon:"🚨",label:"Nếu khẩn cấp",sub:"Đến cấp cứu gần nhất ngay"}
+        ]
+      }
+    ]
+  },
+  no_source: {
+    label: "⚠️ Không có nguồn",
+    messages: [
+      {role:"time",text:"Hôm nay, 14:00"},
+      {role:"bot",type:"normal",text:"Xin chào! Tôi là trợ lý tư vấn gói thai sản Vinmec. 🤰"},
+      {role:"user",text:"Vinmec có hỗ trợ sinh mổ nước ngoài về Việt Nam không? Chi phí có khác không?"},
+      {role:"bot",type:"thinking"},
+      {role:"bot",type:"warning",
+        text:"⚠️ <b>Chưa thể xác nhận chính xác thông tin này.</b>\n\nKnowledge Base hiện tại chưa có chính sách cụ thể về trường hợp <i>sinh mổ cho người về từ nước ngoài</i>.\n\nĐể đảm bảo thông tin chính xác, tôi đề xuất bạn:",
+        noSourceOptions:[
+          {icon:"👩‍💼",label:"Kết nối tư vấn viên thật",sub:"Nhân viên sẽ xác nhận chính xác ngay"},
+          {icon:"📞",label:"Gọi hotline",sub:"1900 232 389"}
+        ]
+      }
+    ]
+  },
+  feedback: {
+    label: "📝 Phản hồi & Log",
+    messages: [
+      {role:"time",text:"Hôm nay, 15:30"},
+      {role:"bot",type:"normal",text:"Xin chào! Tôi là trợ lý tư vấn gói thai sản Vinmec. 🤰"},
+      {role:"user",text:"Gói 36 tuần ở Hải Phòng giá bao nhiêu?"},
+      {role:"bot",type:"thinking"},
+      {role:"bot",type:"success",
+        text:"Theo chính sách hiện hành, gói <b>36 tuần</b> có giá từ <b>18.500.000 đồng</b>. Mức cụ thể tại cơ sở Hải Phòng có thể có chênh lệch nhỏ.",
+        policyTags:["P003"],
+        priceTable:{rows:[{label:"Gói 36 tuần (từ)",val:"18.500.000 đ"}]},
+        hasFeedback:true
+      },
+      {role:"user",text:"Thông tin không đúng, giá ở Hải Phòng khác với thông tin bạn nêu"},
+      {role:"bot",type:"log",
+        text:"Cảm ơn bạn đã phản hồi. Tôi đã ghi nhận thông tin này.",
+        logDetails:"Phản hồi của bạn sẽ được nhân viên Vinmec xem xét và cập nhật lại Knowledge Base để cải thiện câu trả lời cho các lượt sau.",
+        cta:{primary:"👩‍💼 Kết nối tư vấn viên",secondary:"📞 Gọi hotline"}
+      }
+    ]
+  }
+};
+
+// ===== STATE =====
+let chatOpen = false;
+let currentScenario = 'in_scope';
+let isTyping = false;
+
+// ===== TOGGLE CHAT =====
+function toggleChat() {
+  chatOpen = !chatOpen;
+  const win = document.getElementById('chatWindow');
+  const tooltip = document.getElementById('chatTooltip');
+  if (chatOpen) {
+    win.style.display = 'flex';
+    win.style.flexDirection = 'column';
+    tooltip.style.display = 'none';
+    loadScenario(currentScenario);
+  } else {
+    win.style.display = 'none';
+    tooltip.style.display = 'block';
+  }
+}
+
+// ===== LOAD SCENARIO =====
+function loadScenario(name) {
+  currentScenario = name;
+  // Update active demo button
+  document.querySelectorAll('.demo-btn').forEach(b => b.classList.remove('active'));
+  const idx = ['in_scope','clarify','out_of_scope','no_source','feedback'].indexOf(name);
+  if (idx >= 0) document.querySelectorAll('.demo-btn')[idx].classList.add('active');
+
+  const container = document.getElementById('chatMessages');
+  container.innerHTML = '';
+
+  if (!chatOpen) return;
+
+  const scenario = SCENARIOS[name];
+  if (!scenario) return;
+
+  // Render messages with delay
+  let delay = 0;
+  scenario.messages.forEach((msg, i) => {
+    setTimeout(() => {
+      renderMessage(msg, container);
+      scrollToBottom();
+    }, delay);
+    if (msg.role === 'bot' && msg.type === 'thinking') delay += 1200;
+    else delay += 300;
+  });
+}
+
+// ===== RENDER MESSAGE =====
+function renderMessage(msg, container) {
+  const anchor = document.getElementById('scrollAnchor');
+
+  if (msg.role === 'time') {
+    const el = document.createElement('div');
+    el.className = 'msg-time';
+    el.textContent = msg.text;
+    container.insertBefore(el, anchor);
+    return;
+  }
+
+  if (msg.type === 'thinking') {
+    const el = document.createElement('div');
+    el.className = 'msg bot';
+    el.innerHTML = `<div class="msg-avatar">🤖</div>
+      <div class="bubble bot">
+        <div class="typing-indicator">
+          <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+        </div>
+      </div>`;
+    el.id = 'typingEl';
+    container.insertBefore(el, anchor);
+    setTimeout(() => { if(el.parentNode) el.parentNode.removeChild(el); }, 1100);
+    return;
+  }
+
+  const wrap = document.createElement('div');
+
+  if (msg.role === 'user') {
+    wrap.className = 'msg user';
+    wrap.innerHTML = `<div class="bubble user">${msg.text}</div>`;
+  } else {
+    // Bot messages
+    wrap.className = 'msg bot';
+    let bubbleClass = 'bot';
+    if (msg.type === 'warning') bubbleClass = 'bot warning';
+    if (msg.type === 'redirect') bubbleClass = 'bot redirect';
+    if (msg.type === 'success') bubbleClass = 'bot success';
+    if (msg.type === 'log') bubbleClass = 'bot warning';
+
+    let inner = '';
+
+    if (msg.type === 'success') inner += `<div class="bubble-label">✅ Có nguồn chính thức</div>`;
+    if (msg.type === 'warning') inner += `<div class="bubble-label">⚠️ Không đủ nguồn</div>`;
+    if (msg.type === 'redirect') inner += `<div class="bubble-label">🔀 Ngoài phạm vi</div>`;
+    if (msg.type === 'log') inner += `<div class="bubble-label">📝 Ghi nhận phản hồi</div>`;
+    if (msg.type === 'clarify') inner += `<div class="bubble-label">❓ Cần làm rõ</div>`;
+
+    // Main text
+    if (msg.text) inner += `<div style="white-space:pre-line">${msg.text.replace(/\n/g,'<br>')}</div>`;
+
+    // Policy tags
+    if (msg.policyTags) {
+      inner += `<div style="margin-top:8px">`;
+      msg.policyTags.forEach(pid => {
+        const p = KB.policies[pid];
+        inner += `<span class="policy-tag">📋 ${pid}: ${p ? p.title : pid}</span>`;
+      });
+      inner += `</div>`;
+    }
+
+    // Price table
+    if (msg.priceTable) {
+      inner += `<div class="price-highlight">`;
+      msg.priceTable.rows.forEach(r => {
+        inner += `<div class="price-row"><span class="price-label">${r.label}</span><span class="price-val">${r.val}</span></div>`;
+      });
+      inner += `</div>`;
+    }
+
+    // Extra text
+    if (msg.extraText) inner += `<div style="margin-top:8px;font-size:12.5px">${msg.extraText}</div>`;
+
+    // Quick replies
+    if (msg.quickReplies) {
+      inner += `<div class="quick-replies">`;
+      msg.quickReplies.forEach(qr => {
+        inner += `<button class="qr-btn" onclick="handleQuickReply('${qr}')">${qr}</button>`;
+      });
+      inner += `</div>`;
+    }
+
+    // CTA buttons
+    if (msg.cta) {
+      inner += `<div class="chat-cta">`;
+      if (msg.cta.primary) inner += `<button class="cta-primary" onclick="ctaClick('${msg.cta.primary}')">${msg.cta.primary}</button>`;
+      if (msg.cta.secondary) inner += `<button class="cta-secondary" onclick="ctaClick('${msg.cta.secondary}')">${msg.cta.secondary}</button>`;
+      inner += `</div>`;
+    }
+
+    // Feedback
+    if (msg.hasFeedback) {
+      inner += `<div class="feedback-row">
+        <span class="feedback-label">Thông tin có hữu ích không?</span>
+        <button class="fb-btn" onclick="handleFeedback(true, this)">👍 Đúng</button>
+        <button class="fb-btn wrong" onclick="handleFeedback(false, this)">👎 Sai</button>
+      </div>`;
+    }
+
+    // Clarify options
+    if (msg.type === 'clarify' && msg.clarifyOptions) {
+      inner += `<div class="clarify-form">
+        <label>Bạn đang ở giai đoạn nào?</label>
+        <div class="clarify-options">`;
+      msg.clarifyOptions.forEach(opt => {
+        inner += `<button class="clarify-opt" onclick="handleClarify('${opt}')">${opt}</button>`;
+      });
+      inner += `</div></div>`;
+    }
+
+    // Redirect options
+    if (msg.type === 'redirect' && msg.redirectOptions) {
+      inner += `<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">`;
+      msg.redirectOptions.forEach(opt => {
+        inner += `<div style="display:flex;align-items:center;gap:10px;background:white;border:1px solid #fecaca;border-radius:10px;padding:9px 12px;cursor:pointer;" onclick="ctaClick('${opt.label}')">
+          <span style="font-size:18px">${opt.icon}</span>
+          <div><div style="font-size:12.5px;font-weight:700;color:#991b1b">${opt.label}</div><div style="font-size:11px;color:#9ca3af">${opt.sub}</div></div>
+        </div>`;
+      });
+      inner += `</div>`;
+    }
+
+    // No source options
+    if (msg.type === 'warning' && msg.noSourceOptions) {
+      inner += `<div style="margin-top:10px;display:flex;flex-direction:column;gap:7px;">`;
+      msg.noSourceOptions.forEach(opt => {
+        inner += `<div style="display:flex;align-items:center;gap:10px;background:white;border:1px solid #fed7aa;border-radius:10px;padding:9px 12px;cursor:pointer;">
+          <span style="font-size:18px">${opt.icon}</span>
+          <div><div style="font-size:12.5px;font-weight:700;color:#9a3412">${opt.label}</div><div style="font-size:11px;color:#9ca3af">${opt.sub}</div></div>
+        </div>`;
+      });
+      inner += `</div>`;
+    }
+
+    // Log details
+    if (msg.type === 'log' && msg.logDetails) {
+      inner += `<div class="log-notice">
+        <div class="log-notice-icon">📋</div>
+        <div style="font-size:11.5px">${msg.logDetails}</div>
+      </div>`;
+      if (msg.cta) {
+        inner += `<div class="chat-cta" style="margin-top:8px">`;
+        if (msg.cta.primary) inner += `<button class="cta-primary">${msg.cta.primary}</button>`;
+        if (msg.cta.secondary) inner += `<button class="cta-secondary">${msg.cta.secondary}</button>`;
+        inner += `</div>`;
+      }
+    }
+
+    wrap.innerHTML = `<div class="msg-avatar">🤖</div><div class="bubble ${bubbleClass}">${inner}</div>`;
+  }
+
+  container.insertBefore(wrap, anchor);
+
+  // Animate in
+  wrap.style.opacity = '0';
+  wrap.style.transform = 'translateY(8px)';
+  wrap.style.transition = 'all 0.25s ease';
+  requestAnimationFrame(() => {
+    wrap.style.opacity = '1';
+    wrap.style.transform = 'translateY(0)';
+  });
+}
+
+// ===== SEND USER MESSAGE =====
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  autoResize(input);
+
+  const container = document.getElementById('chatMessages');
+  renderMessage({role:'user', text}, container);
+  scrollToBottom();
+
+  // Simulate bot response
+  setTimeout(() => {
+    renderMessage({role:'bot', type:'thinking'}, container);
+    scrollToBottom();
+  }, 300);
+
+  setTimeout(() => {
+    const response = getBotResponse(text);
+    renderMessage(response, container);
+    scrollToBottom();
+  }, 1600);
+}
+
+// ===== SIMPLE BOT RESPONSE LOGIC =====
+function getBotResponse(text) {
+  const t = text.toLowerCase();
+
+  // Out of scope: medical symptoms
+  const medicalKeywords = ['đau bụng','ra máu','triệu chứng','bị sao','có nguy hiểm','chóng mặt','buồn nôn quá','nhức đầu','khó thở'];
+  if (medicalKeywords.some(k => t.includes(k))) {
+    return {role:'bot',type:'redirect',
+      text:'⚠️ <b>Câu hỏi này liên quan đến triệu chứng y tế – ngoài phạm vi chatbot.</b>\n\nTôi không thể tư vấn về triệu chứng lâm sàng.',
+      redirectOptions:[
+        {icon:"📞",label:"Gọi hotline Vinmec",sub:"1900 232 389 – 24/7"},
+        {icon:"👨‍⚕️",label:"Đặt lịch khám bác sĩ",sub:"Chuyên khoa sản"},
+      ]
+    };
+  }
+
+  // Insurance
+  if (t.includes('bảo hiểm') || t.includes('aia') || t.includes('bao hiểm')) {
+    return {role:'bot',type:'success',
+      text:'Về <b>bảo hiểm và đồng chi trả</b> tại Vinmec:',
+      policyTags:['P009'],
+      extraText:'• Hỗ trợ bảo lãnh viện phí với thẻ AIA và đối tác khác<br>• Phần ngoài danh mục quyền lợi sẽ do khách hàng tự chi trả<br>• Nâng hạng phòng, thuốc ngoài danh mục thường không được bảo lãnh<br><br><i>⚠️ Quyền lợi cụ thể phụ thuộc hợp đồng bảo hiểm của bạn.</i>',
+      cta:{primary:"👩‍💼 Tư vấn bảo hiểm",secondary:"📞 Gọi hotline"},
+      hasFeedback:true
+    };
+  }
+
+  // Price / packages
+  if (t.includes('27 tuần') || t.includes('gói 27')) {
+    return {role:'bot',type:'success',
+      text:'Thông tin <b>gói thai sản 27 tuần</b>:',
+      policyTags:['P003'],
+      priceTable:{rows:[{label:'Gói 27 tuần (từ)',val:'28.500.000 đ'},{label:'Ưu đãi tháng 4',val:'–5% đến –8%'}]},
+      extraText:'Gồm: khám thai định kỳ, xét nghiệm cơ bản, tư vấn bác sĩ sản, quyền lợi sinh theo gói.',
+      cta:{primary:"📅 Đặt lịch tư vấn",secondary:"📋 Xem chi tiết"},
+      hasFeedback:true
+    };
+  }
+  if (t.includes('36 tuần') || t.includes('gói 36')) {
+    return {role:'bot',type:'success',
+      text:'Thông tin <b>gói thai sản 36 tuần</b>:',
+      policyTags:['P003'],
+      priceTable:{rows:[{label:'Gói 36 tuần (từ)',val:'18.500.000 đ'}]},
+      extraText:'Phù hợp đăng ký gần ngày sinh, tập trung hồ sơ nhập viện và quyền lợi sinh cơ bản.',
+      cta:{primary:"📅 Đặt lịch tư vấn",secondary:"📋 Xem chi tiết"},
+      hasFeedback:true
+    };
+  }
+  if (t.includes('sinh mổ') || t.includes('mổ')) {
+    return {role:'bot',type:'success',
+      text:'Chi phí <b>sinh mổ</b> dự kiến tại Vinmec:',
+      policyTags:['P005'],
+      priceTable:{rows:[
+        {label:'Sinh mổ lần đầu',val:'32–52 triệu đ'},
+        {label:'Sinh mổ lần 2',val:'38–60 triệu đ'},
+        {label:'Phụ thu ngày lễ (nếu chọn)',val:'+10% đến +20%'},
+      ]},
+      extraText:'Giá phụ thuộc hạng phòng, thuốc/vật tư sử dụng và thời điểm thực hiện.',
+      cta:{primary:"📅 Đặt lịch tư vấn",secondary:"📞 Gọi hotline"},
+      hasFeedback:true
+    };
+  }
+  if (t.includes('đẻ thường') || t.includes('sinh thường')) {
+    return {role:'bot',type:'success',
+      text:'Chi phí <b>sinh thường</b> dự kiến tại Vinmec:',
+      policyTags:['P004'],
+      priceTable:{rows:[{label:'Tổng chi phí ước tính',val:'18–32 triệu đ'}]},
+      extraText:'Phát sinh thêm nếu dùng thuốc ngoài danh mục, nằm dài ngày hoặc nâng hạng phòng.',
+      cta:{primary:"📅 Đặt lịch tư vấn",secondary:"📋 Xem chi tiết gói"},
+      hasFeedback:true
+    };
+  }
+  if (t.includes('ưu đãi') || t.includes('khuyến mãi') || t.includes('giảm')) {
+    return {role:'bot',type:'success',
+      text:'<b>Ưu đãi tháng 4/2026</b> cho gói thai sản:',
+      policyTags:['P012'],
+      priceTable:{rows:[{label:'Giảm trực tiếp',val:'5% – 8%'}]},
+      extraText:'• Áp dụng cho gói 27 tuần và 36 tuần<br>• Điều kiện: đăng ký và đặt cọc trong tháng 4<br>• Không cộng dồn với khuyến mãi khác<br><br><i>⚠️ Số lượng suất có giới hạn theo từng cơ sở.</i>',
+      cta:{primary:"📅 Đăng ký ngay",secondary:"📋 Điều kiện ưu đãi"},
+      hasFeedback:true
+    };
+  }
+  if (t.includes('không mua gói') || t.includes('không cần gói') || t.includes('tạm ứng')) {
+    return {role:'bot',type:'success',
+      text:'Bạn <b>không bắt buộc phải mua gói</b> để sinh tại Vinmec:',
+      policyTags:['P006'],
+      priceTable:{rows:[
+        {label:'Tạm ứng sinh thường (từ)',val:'10.000.000 đ'},
+        {label:'Tạm ứng sinh mổ (từ)',val:'20.000.000 đ'},
+      ]},
+      extraText:'Vẫn cần hoàn tất hồ sơ sinh và được cơ sở xác nhận tiếp nhận.',
+      cta:{primary:"📋 Làm hồ sơ sinh",secondary:"📞 Tư vấn thêm"},
+      hasFeedback:true
+    };
+  }
+
+  // Ambiguous – needs clarification
+  if (t.includes('gói') && !t.includes('giá') && !t.includes('27') && !t.includes('36') && !t.includes('bao nhiêu')) {
+    return {role:'bot',type:'clarify',
+      text:'Để tư vấn chính xác, bạn có thể cho biết thêm:',
+      clarifyOptions:[
+        "📅 Tôi đang ở tuần 27–35 (gói 27 tuần)",
+        "🗓️ Tôi đang ở tuần 36+ (gói 36 tuần)",
+        "💰 Tôi muốn so sánh giá 2 gói",
+        "🏥 Tôi chưa quyết định cơ sở"
+      ]
+    };
+  }
+
+  // Default / no confident source
+  return {role:'bot',type:'warning',
+    text:'⚠️ <b>Chưa thể xác nhận chính xác thông tin này từ nguồn chính thức.</b>\n\nTôi đề xuất bạn liên hệ tư vấn viên để được hỗ trợ chính xác nhất.',
+    noSourceOptions:[
+      {icon:"👩‍💼",label:"Kết nối tư vấn viên",sub:"Phản hồi trong vài phút"},
+      {icon:"📞",label:"Gọi hotline",sub:"1900 232 389"}
+    ]
+  };
+}
+
+// ===== HANDLE QUICK REPLY =====
+function handleQuickReply(text) {
+  document.getElementById('chatInput').value = text;
+  sendMessage();
+}
+
+function handleClarify(opt) {
+  document.getElementById('chatInput').value = opt;
+  sendMessage();
+}
+
+function ctaClick(label) {
+  // Simulate CTA
+  const container = document.getElementById('chatMessages');
+  const anchor = document.getElementById('scrollAnchor');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg bot';
+  wrap.innerHTML = `<div class="msg-avatar">🤖</div><div class="bubble bot" style="font-size:12.5px">Đã ghi nhận yêu cầu "<b>${label}</b>". Tư vấn viên sẽ liên hệ bạn sớm nhất! 👋</div>`;
+  container.insertBefore(wrap, anchor);
+  scrollToBottom();
+}
+
+// ===== FEEDBACK =====
+function handleFeedback(correct, btn) {
+  const row = btn.closest('.feedback-row');
+  if (correct) {
+    row.innerHTML = '<span style="color:#16a34a;font-size:12px">✅ Cảm ơn phản hồi của bạn!</span>';
+  } else {
+    row.innerHTML = '<span style="color:#dc2626;font-size:12px">📝 Đã ghi nhận – nhân viên sẽ review và cập nhật KB</span>';
+    // Show log notice
+    const container = document.getElementById('chatMessages');
+    const anchor = document.getElementById('scrollAnchor');
+    const el = document.createElement('div');
+    el.className = 'msg bot';
+    el.innerHTML = `<div class="msg-avatar">🤖</div>
+      <div class="bubble bot warning">
+        <div class="bubble-label">📝 Ghi nhận phản hồi</div>
+        Cảm ơn! Phản hồi của bạn đã được lưu vào log hệ thống.<br>
+        <div class="log-notice" style="margin-top:8px">
+          <div class="log-notice-icon">🔄</div>
+          <div>Nhân viên Vinmec sẽ review và cập nhật Knowledge Base để cải thiện câu trả lời cho các lượt sau.</div>
+        </div>
+        <div class="chat-cta" style="margin-top:8px">
+          <button class="cta-primary" onclick="ctaClick('Kết nối tư vấn viên')">👩‍💼 Kết nối tư vấn viên</button>
+        </div>
+      </div>`;
+    container.insertBefore(el, anchor);
+    scrollToBottom();
+  }
+}
+
+// ===== UTILS =====
+function scrollToBottom() {
+  const container = document.getElementById('chatMessages');
+  container.scrollTop = container.scrollHeight;
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+}
+
+// ===== INIT: show tooltip then hide =====
+setTimeout(() => {
+  const tooltip = document.getElementById('chatTooltip');
+  if (tooltip) tooltip.style.opacity = '0';
+  setTimeout(() => { if(tooltip) tooltip.style.display = 'none'; }, 500);
+}, 4000);
+</script>
+</body>
+</html>
