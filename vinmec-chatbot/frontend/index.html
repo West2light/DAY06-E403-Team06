@@ -217,8 +217,9 @@ function renderBookingStep() {
     formHtml = `
       <input class="booking-input" id="bookingInput" type="${s.type}"
         placeholder="${escAttr(s.placeholder)}" autocomplete="off" />
+      <p class="booking-error" id="bookingError"></p>
       <button class="booking-next-btn" id="bookingNextBtn" type="button">
-        ${step === 'note' ? 'Tiếp theo →' : 'Tiếp theo →'}
+        Tiếp theo →
       </button>
       ${step === 'note'
         ? `<button class="booking-edit-btn booking-skip-btn" id="bookingSkipBtn" type="button">Bỏ qua</button>`
@@ -267,19 +268,53 @@ function renderBookingStep() {
   });
 }
 
-function bookingNext(skip = false) {
-  const step  = BOOKING_STEPS[booking.step];
-  const input = document.querySelector('#bookingInput');
-  const val   = skip ? '' : (input?.value.trim() || '');
+function bookingShowError(input, errorEl, msg) {
+  if (input) { input.classList.add('error'); input.focus(); }
+  if (errorEl) { errorEl.textContent = msg; errorEl.classList.add('visible'); }
+}
 
-  // Validate
+function bookingClearError(input, errorEl) {
+  if (input) { input.classList.remove('error'); }
+  if (errorEl) { errorEl.textContent = ''; errorEl.classList.remove('visible'); }
+}
+
+function validateBookingField(step, val) {
+  if (step === 'name') {
+    if (!val) return 'Vui lòng nhập họ và tên. Không được để trống.';
+    if (val.length < 2) return 'Họ tên quá ngắn. Vui lòng nhập lại.';
+    if (!/^[\p{L}\s]+$/u.test(val)) return 'Họ tên chỉ được chứa chữ cái. Vui lòng nhập lại.';
+  }
+  if (step === 'dob') {
+    if (!val) return 'Vui lòng nhập ngày sinh. Không được để trống.';
+    if (!/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(val)) return 'Định dạng không đúng. Vui lòng nhập theo dạng DD/MM/YYYY (VD: 15/03/1995).';
+    const [d, m, y] = val.split('/').map(Number);
+    const date = new Date(y, m - 1, d);
+    if (date.getDate() !== d || date.getMonth() !== m - 1 || date.getFullYear() !== y)
+      return 'Ngày sinh không hợp lệ. Vui lòng nhập lại.';
+    const age = new Date().getFullYear() - y;
+    if (age < 15 || age > 60) return 'Tuổi phải từ 15 đến 60. Vui lòng nhập lại.';
+  }
+  if (step === 'phone') {
+    if (!val) return 'Vui lòng nhập số điện thoại. Không được để trống.';
+    if (/[^\d\s\-]/.test(val)) return 'Số điện thoại chỉ được chứa chữ số. Vui lòng nhập lại.';
+    const digits = val.replace(/[\s\-]/g, '');
+    if (digits.length !== 10) return `Số điện thoại phải có đúng 10 chữ số (hiện có ${digits.length}). Vui lòng nhập lại.`;
+    if (!/^0[3-9]\d{8}$/.test(digits)) return 'Số điện thoại không hợp lệ (phải bắt đầu bằng 03x–09x). Vui lòng nhập lại.';
+  }
+  return null; // hợp lệ
+}
+
+function bookingNext(skip = false) {
+  const step    = BOOKING_STEPS[booking.step];
+  const input   = document.querySelector('#bookingInput');
+  const errorEl = document.querySelector('#bookingError');
+  const val     = skip ? '' : (input?.value.trim() || '');
+
   if (!skip) {
-    if (!val && step !== 'note') {
-      if (input) { input.style.borderColor = 'var(--red)'; input.focus(); }
-      return;
-    }
-    if (step === 'phone' && val && !/^[0-9\s\+\-]{9,15}$/.test(val)) {
-      if (input) { input.style.borderColor = 'var(--red)'; input.placeholder = 'SĐT không hợp lệ!'; input.focus(); }
+    bookingClearError(input, errorEl);
+    const errMsg = validateBookingField(step, val);
+    if (errMsg) {
+      bookingShowError(input, errorEl, errMsg);
       return;
     }
   }

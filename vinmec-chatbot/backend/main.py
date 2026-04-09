@@ -4,6 +4,7 @@ FastAPI server cho Vinmec Maternity Chatbot.
 """
 
 import os
+import re
 import uuid
 import json
 from datetime import datetime
@@ -237,9 +238,53 @@ async def delete_session(session_id: str):
     return {"status": "ok"}
 
 
+def _validate_booking(req: BookingRequest) -> list[str]:
+    """Trả về danh sách lỗi (rỗng = hợp lệ)."""
+    errors = []
+
+    name = req.name.strip()
+    if not name:
+        errors.append("Họ tên không được để trống.")
+    elif len(name) < 2:
+        errors.append("Họ tên quá ngắn.")
+    elif not re.match(r'^[\w\s]+$', name, re.UNICODE):
+        errors.append("Họ tên chứa ký tự không hợp lệ.")
+
+    dob = req.dob.strip()
+    if not dob:
+        errors.append("Ngày sinh không được để trống.")
+    else:
+        if not re.match(r'^\d{1,2}/\d{1,2}/\d{4}$', dob):
+            errors.append("Ngày sinh phải theo định dạng DD/MM/YYYY.")
+        else:
+            try:
+                d, m, y = (int(x) for x in dob.split('/'))
+                parsed = datetime(y, m, d)
+                age = datetime.now().year - parsed.year
+                if age < 15 or age > 60:
+                    errors.append("Tuổi phải từ 15 đến 60.")
+            except ValueError:
+                errors.append("Ngày sinh không hợp lệ.")
+
+    phone = req.phone.strip().replace(' ', '').replace('-', '')
+    if not phone:
+        errors.append("Số điện thoại không được để trống.")
+    elif not re.match(r'^0[3-9]\d{8}$', phone):
+        errors.append("Số điện thoại không hợp lệ (cần 10 số, bắt đầu 03x–09x).")
+
+    if not req.facility.strip():
+        errors.append("Vui lòng chọn cơ sở.")
+
+    return errors
+
+
 @app.post("/api/booking")
 async def create_booking(req: BookingRequest):
     """Lưu lịch tư vấn vào file bookings.json."""
+    errors = _validate_booking(req)
+    if errors:
+        raise HTTPException(status_code=422, detail={"errors": errors})
+
     record = {
         "id": str(uuid.uuid4())[:8],
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
