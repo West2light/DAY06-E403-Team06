@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinmec Healthcare System – AI Chatbot</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #00748a;
+    --teal-dark: #00536e;
+    --teal-light: #e0f4f7;
+    --gold: #c8972b;
+    --green: #2eaa6e;
+    --red: #e03e3e;
+    --orange: #f07c20;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-400: #94a3b8;
+    --gray-600: #475569;
+    --gray-800: #1e293b;
+    --white: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Be Vietnam Pro', sans-serif; background: #f1f5f9; color: var(--gray-800); }
+
+  /* ====== HEADER ====== */
+  .top-bar {
+    background: var(--teal-dark);
+    color: white; font-size: 12.5px;
+    display: flex; justify-content: flex-end; gap: 24px; padding: 6px 40px;
+  }
+  .top-bar a { color: #bfe8f0; text-decoration: none; }
+  .top-bar a:hover { color: white; }
+
+  .main-header {
+    background: white;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 40px; border-bottom: 1px solid var(--gray-200);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+  }
+  .logo { display: flex; flex-direction: row; align-items: center; gap: 6px; }
+  .logo-text { font-size: 22px; font-weight: 700; color: var(--teal-dark); letter-spacing: 1px; }
+  .logo-sub { font-size: 8px; color: var(--gold); letter-spacing: 2px; font-weight: 600; }
+  .logo-bird { font-size: 20px; color: var(--gold); margin-right: 4px; }
+
+  .search-bar {
+    display: flex; align-items: center; gap: 8px;
+    border: 1.5px solid var(--gray-200); border-radius: 24px;
+    padding: 7px 16px; background: var(--gray-50); width: 280px;
+    font-size: 13px; color: var(--gray-400);
+  }
+  .header-actions { display: flex; align-items: center; gap: 14px; }
+  .btn-calendar {
+    border: 1.5px solid var(--teal); color: var(--teal);
+    border-radius: 8px; padding: 7px 14px; font-size: 12.5px; font-weight: 600;
+    cursor: pointer; background: white; display: flex; align-items: center; gap: 6px;
+  }
+  .flag-badge {
+    background: var(--gray-100); border-radius: 6px; padding: 5px 8px; font-size: 13px;
+  }
+
+  nav {
+    background: white; border-bottom: 1px solid var(--gray-100);
+    display: flex; justify-content: center; gap: 36px; padding: 0 40px;
+  }
+  nav a {
+    color: var(--gray-600); text-decoration: none; font-size: 13.5px; font-weight: 500;
+    padding: 14px 0; border-bottom: 2.5px solid transparent;
+    transition: all 0.2s;
+  }
+  nav a:hover, nav a.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+  /* ====== HERO ====== */
+  .hero {
+    background: linear-gradient(135deg, #fce8f0 0%, #f8d7e8 30%, #fde8d4 65%, #e8f4f8 100%);
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    min-height: 360px; position: relative; overflow: hidden;
+    padding: 0 40px;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center; gap: 18px;
+    padding: 40px 0;
+  }
+  .hero-left h1 { font-size: 32px; font-weight: 700; color: var(--gray-800); line-height: 1.3; }
+  .btn-more {
+    display: inline-block; background: var(--green); color: white;
+    border-radius: 24px; padding: 11px 28px; font-weight: 600; font-size: 14px;
+    border: none; cursor: pointer; width: fit-content;
+  }
+  .hero-center {
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .hero-img-placeholder {
+    width: 220px; height: 260px;
+    background: linear-gradient(160deg, #f8b4cc, #f5d0be);
+    border-radius: 50% 50% 48% 52% / 60% 60% 40% 40%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 90px; box-shadow: 0 8px 32px rgba(200,80,120,0.18);
+  }
+  .heart { position: absolute; font-size: 22px; animation: float 3s ease-in-out infinite; }
+  .heart:nth-child(1) { top: 40px; left: 30px; animation-delay: 0s; }
+  .heart:nth-child(2) { top: 60px; right: 20px; animation-delay: 1s; }
+  .heart:nth-child(3) { bottom: 60px; left: 20px; animation-delay: 2s; }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+
+  .hero-right {
+    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+    padding: 30px 20px;
+  }
+  .vinmec-badge {
+    background: white; border-radius: 12px; padding: 16px 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%;
+  }
+  .vinmec-badge-title { font-size: 20px; font-weight: 800; color: var(--teal-dark); letter-spacing: 1px; }
+  .vinmec-badge-sub { font-size: 9px; color: var(--gold); letter-spacing: 2px; font-weight: 600; }
+  .promo-text {
+    font-family: Georgia, serif; font-style: italic;
+    font-size: 28px; color: #d4507a; font-weight: 700;
+    margin-top: 8px; line-height: 1.2;
+  }
+  .promo-sub { font-size: 14px; color: var(--teal); font-weight: 600; margin-top: 4px; }
+  .btn-consult {
+    margin-top: 12px; background: var(--teal-dark); color: white;
+    border: none; border-radius: 20px; padding: 10px 20px;
+    font-size: 12px; font-weight: 700; cursor: pointer; letter-spacing: 0.5px;
+  }
+
+  /* Quick actions bar */
+  .quick-actions {
+    background: white; display: grid; grid-template-columns: repeat(3,1fr);
+    border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+    margin: -28px 40px 0; position: relative; z-index: 10; overflow: hidden;
+    border: 1px solid var(--gray-100);
+  }
+  .qa-item {
+    display: flex; align-items: flex-start; gap: 14px; padding: 20px 24px;
+    border-right: 1px solid var(--gray-100); cursor: pointer; transition: background 0.2s;
+  }
+  .qa-item:last-child { border-right: none; }
+  .qa-item:hover { background: var(--teal-light); }
+  .qa-icon { font-size: 22px; margin-top: 2px; color: var(--teal); }
+  .qa-title { font-size: 14px; font-weight: 700; color: var(--gray-800); }
+  .qa-sub { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+
+  /* ====== CONTENT ====== */
+  .content-section { padding: 60px 40px 40px; max-width: 1200px; margin: 0 auto; }
+  .section-title { font-size: 22px; font-weight: 700; color: var(--gray-800); margin-bottom: 6px; }
+  .section-underline { width: 40px; height: 3px; background: var(--teal); border-radius: 2px; margin-bottom: 32px; }
+
+  /* ====== CHATBOT BUTTON ====== */
+  .chatbot-fab {
+    position: fixed; bottom: 28px; right: 28px; z-index: 1000;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+  }
+  .chatbot-tooltip {
+    background: var(--gray-800); color: white; font-size: 12px; font-weight: 500;
+    padding: 8px 14px; border-radius: 20px; white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease;
+  }
+  .chatbot-btn {
+    width: 58px; height: 58px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+    border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    font-size: 26px; box-shadow: 0 4px 20px rgba(0,116,138,0.4);
+    transition: transform 0.2s; position: relative;
+  }
+  .chatbot-btn:hover { transform: scale(1.08); }
+  .chatbot-ping {
+    position: absolute; top: -2px; right: -2px;
+    width: 14px; height: 14px; background: var(--red); border-radius: 50%;
+    border: 2px solid white;
+    animation: ping 1.5s ease-in-out infinite;
+  }
+  @keyframes ping { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:0.7} }
+
+  /* ====== CHATBOT WINDOW ====== */
+  .chatbot-window {
+    position: fixed; bottom: 100px; right: 28px; z-index: 999;
+    width: 400px; height: 640px;
+    background: white; border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18), 0 4px 20px rgba(0,116,138,0.15);
+    display: none;
+    flex-direction: column; overflow: hidden;
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  /* Chat header */
+  .chat-header {
+    background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+    padding: 14px 16px; display: flex; align-items: center; gap: 10px;
+    color: white; flex-shrink: 0;
+  }
+  .chat-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.4);
+    display: flex; align-items: center; justify-content: center; font-size: 20px;
+    flex-shrink: 0;
+  }
+  .chat-header-info h3 { font-size: 14px; font-weight: 700; }
+  .chat-header-info p { font-size: 11px; opacity: 0.85; margin-top: 1px; }
+  .chat-status { display: flex; align-items: center; gap: 5px; font-size: 11px; opacity: 0.9; margin-top: 2px; }
+  .status-dot { width: 7px; height: 7px; background: #4ade80; border-radius: 50%; }
+  .chat-header-actions { margin-left: auto; display: flex; gap: 6px; }
+  .chat-icon-btn {
+    background: rgba(255,255,255,0.15); border: none; color: white;
+    width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s;
+  }
+  .chat-icon-btn:hover { background: rgba(255,255,255,0.3); }
+
+  /* API key panel */
+  .api-key-panel {
+    background: #f0fdf4; border-bottom: 1px solid #bbf7d0;
+    padding: 10px 14px; display: none; flex-shrink: 0;
+  }
+  .api-key-panel.open { display: block; }
+  .api-key-label { font-size: 11px; font-weight: 700; color: #166534; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+  .api-key-row { display: flex; gap: 6px; }
+  .api-key-input {
+    flex: 1; border: 1.5px solid #86efac; border-radius: 8px;
+    padding: 6px 10px; font-size: 12px; font-family: monospace;
+    outline: none; background: white; color: var(--gray-800);
+  }
+  .api-key-input:focus { border-color: var(--green); }
+  .api-key-save {
+    background: var(--green); color: white; border: none;
+    border-radius: 8px; padding: 6px 12px; font-size: 11.5px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+  }
+  .api-key-status { font-size: 10.5px; margin-top: 5px; }
+  .api-key-status.ok { color: #166534; }
+  .api-key-status.err { color: #dc2626; }
+  .api-model-row { margin-top: 6px; display: flex; align-items: center; gap: 8px; }
+  .api-model-label { font-size: 11px; color: #166534; font-weight: 600; }
+  .api-model-select {
+    border: 1.5px solid #86efac; border-radius: 6px; padding: 4px 8px;
+    font-size: 11.5px; font-family: inherit; outline: none; background: white;
+    color: var(--gray-800); cursor: pointer;
+  }
+
+  /* Chat topic badge */
+  .chat-topic-bar {
+    background: var(--teal-light); padding: 7px 14px;
+    display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #c8e9ef;
+    flex-shrink: 0;
+  }
+  .topic-badge {
+    background: var(--teal); color: white; font-size: 10.5px; font-weight: 600;
+    padding: 3px 10px; border-radius: 20px;
+  }
+  .topic-label { font-size: 11px; color: var(--teal-dark); font-weight: 500; }
+  .topic-reset {
+    margin-left: auto; background: none; border: 1px solid var(--teal);
+    color: var(--teal); border-radius: 10px; padding: 2px 8px; font-size: 10px;
+    cursor: pointer; font-family: inherit; font-weight: 600;
+  }
+  .topic-reset:hover { background: var(--teal); color: white; }
+
+  /* Messages area */
+  .chat-messages {
+    flex: 1; overflow-y: auto; padding: 14px 12px; display: flex; flex-direction: column; gap: 10px;
+    background: #f8fbfc;
+  }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 4px; }
+
+  /* Message bubbles */
+  .msg { display: flex; gap: 8px; align-items: flex-end; max-width: 100%; }
+  .msg.bot { justify-content: flex-start; }
+  .msg.user { justify-content: flex-end; }
+
+  .msg-avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0; margin-bottom: 2px;
+  }
+
+  .bubble {
+    max-width: 84%; padding: 10px 13px; border-radius: 16px; font-size: 13px; line-height: 1.55;
+  }
+  .bubble.bot {
+    background: white; color: var(--gray-800);
+    border: 1px solid var(--gray-200); border-bottom-left-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .bubble.user {
+    background: linear-gradient(135deg, var(--teal-dark), var(--teal));
+    color: white; border-bottom-right-radius: 4px;
+  }
+  .bubble.warning {
+    background: #fff7ed; border-color: #fed7aa; border-left: 3px solid var(--orange);
+  }
+  .bubble.redirect {
+    background: #fef2f2; border-color: #fecaca; border-left: 3px solid var(--red);
+  }
+  .bubble.success {
+    background: #f0fdf4; border-color: #bbf7d0; border-left: 3px solid var(--green);
+  }
+
+  .bubble-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 5px; opacity: 0.7;
+  }
+  .bubble.warning .bubble-label { color: var(--orange); }
+  .bubble.redirect .bubble-label { color: var(--red); }
+  .bubble.success .bubble-label { color: var(--green); }
+
+  /* Policy tag */
+  .policy-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--teal-light); color: var(--teal-dark);
+    font-size: 10.5px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+    margin-top: 6px; margin-right: 4px;
+  }
+
+  /* Price highlight */
+  .price-highlight {
+    background: linear-gradient(135deg, #00748a15, #00536e10);
+    border: 1px solid #00748a30; border-radius: 10px;
+    padding: 10px 12px; margin-top: 8px;
+  }
+  .price-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; }
+  .price-label { font-size: 12px; color: var(--gray-600); }
+  .price-val { font-size: 13px; font-weight: 700; color: var(--teal-dark); }
+
+  /* Quick replies */
+  .quick-replies { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .qr-btn {
+    background: white; border: 1.5px solid var(--teal); color: var(--teal);
+    border-radius: 16px; padding: 5px 12px; font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s; font-family: inherit;
+  }
+  .qr-btn:hover { background: var(--teal); color: white; }
+
+  /* CTA buttons */
+  .chat-cta { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .cta-primary {
+    background: var(--teal-dark); color: white; border: none;
+    border-radius: 12px; padding: 7px 13px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px;
+  }
+  .cta-secondary {
+    background: white; color: var(--teal); border: 1.5px solid var(--teal);
+    border-radius: 12px; padding: 7px 13px; font-size: 12px; font-weight: 600;
+    cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px;
+  }
+
+  /* Feedback row */
+  .feedback-row {
+    display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px;
+    border-top: 1px solid var(--gray-100);
+  }
+  .feedback-label { font-size: 11px; color: var(--gray-400); }
+  .fb-btn {
+    background: none; border: 1px solid var(--gray-200); border-radius: 8px;
+    padding: 3px 10px; font-size: 12px; cursor: pointer; transition: all 0.15s;
+  }
+  .fb-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .fb-btn.wrong:hover { border-color: var(--red); color: var(--red); }
+
+  /* Typing indicator */
+  .typing-indicator { display: flex; align-items: center; gap: 4px; padding: 8px 12px; }
+  .typing-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--gray-400);
+    animation: typing 1.2s ease-in-out infinite;
+  }
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing { 0%,100%{transform:translateY(0);opacity:0.5} 50%{transform:translateY(-5px);opacity:1} }
+
+  /* Timestamp */
+  .msg-time { font-size: 10px; color: var(--gray-400); margin-top: 2px; text-align: center; width: 100%; }
+
+  /* Clarify prompt */
+  .clarify-form { background: #f8f3ff; border: 1px solid #e0d4fc; border-radius: 12px; padding: 10px; margin-top: 8px; }
+  .clarify-form label { font-size: 11px; color: #5b21b6; font-weight: 600; display: block; margin-bottom: 6px; }
+  .clarify-options { display: flex; flex-direction: column; gap: 5px; }
+  .clarify-opt {
+    background: white; border: 1.5px solid #c4b5fd; color: #5b21b6;
+    border-radius: 8px; padding: 6px 12px; font-size: 12px; font-weight: 500;
+    cursor: pointer; text-align: left; font-family: inherit; transition: all 0.15s;
+  }
+  .clarify-opt:hover { background: #5b21b6; color: white; border-color: #5b21b6; }
+
+  /* Log notification */
+  .log-notice {
+    background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px;
+    padding: 10px 12px; margin-top: 6px; font-size: 11.5px; color: #9a3412;
+    display: flex; gap: 8px; align-items: flex-start;
+  }
+  .log-notice-icon { font-size: 14px; flex-shrink: 0; }
+
+  /* Error notice */
+  .error-notice {
+    background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px;
+    padding: 8px 12px; margin-top: 6px; font-size: 11.5px; color: #991b1b;
+  }
+
+  /* Input area */
+  .chat-input-area {
+    padding: 10px 12px; background: white; border-top: 1px solid var(--gray-100);
+    display: flex; gap: 8px; align-items: flex-end; flex-shrink: 0;
+  }
+  .chat-input {
+    flex: 1; border: 1.5px solid var(--gray-200); border-radius: 20px;
+    padding: 8px 14px; font-size: 13px; font-family: inherit;
+    outline: none; resize: none; max-height: 80px; min-height: 36px;
+    transition: border-color 0.2s; line-height: 1.4;
+  }
+  .chat-input:focus { border-color: var(--teal); }
+  .send-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--teal); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 15px; flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .send-btn:hover { background: var(--teal-dark); }
+  .send-btn:disabled { background: var(--gray-200); cursor: not-allowed; }
+
+  /* Chat footer */
+  .chat-footer {
+    background: var(--gray-50); padding: 5px 12px;
+    font-size: 10px; color: var(--gray-400); text-align: center;
+    border-top: 1px solid var(--gray-100); flex-shrink: 0;
+  }
+
+  /* Scroll anchor */
+  .scroll-anchor { height: 1px; }
+
+  /* Responsive */
+  @media(max-width:600px){
+    .chatbot-window{width:calc(100vw - 20px);right:10px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== PAGE LAYOUT ===== -->
+<div class="top-bar">
+  <a href="#">Tìm bác sĩ</a>
+  <a href="#">Chăm sóc khách hàng</a>
+</div>
+
+<header class="main-header">
+  <div class="logo">
+    <span class="logo-bird">🦅</span>
+    <div>
+      <div class="logo-text">VINMEC</div>
+      <div class="logo-sub">HEALTHCARE SYSTEM</div>
+    </div>
+  </div>
+  <div class="search-bar">
+    <span>🔍</span> Tìm kiếm...
+  </div>
+  <div class="header-actions">
+    <button class="btn-calendar">📅 Đặt lịch</button>
+    <div class="flag-badge">🇻🇳 ▾</div>
+  </div>
+</header>
+
+<nav>
+  <a href="#">Chuyên khoa</a>
+  <a href="#" class="active">Hướng dẫn khách hàng</a>
+  <a href="#">Phát triển bền vững</a>
+  <a href="#">Về Vinmec</a>
+  <a href="#">Chuyên trang sức khỏe</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <h1>Chăm sóc bằng tài năng,<br>y đức và sự thấu cảm</h1>
+    <button class="btn-more">Xem thêm</button>
+  </div>
+  <div class="hero-center">
+    <div style="position:relative">
+      <div class="hero-img-placeholder">👩‍🍼</div>
+      <span class="heart">💗</span>
+      <span class="heart">💖</span>
+      <span class="heart">💝</span>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="vinmec-badge">
+      <div style="display:flex;align-items:center;gap:6px;">
+        <span style="color:var(--gold);font-size:18px;">🦅</span>
+        <div>
+          <div class="vinmec-badge-title">VINMEC</div>
+          <div class="vinmec-badge-sub">HEALTHCARE SYSTEM</div>
+        </div>
+      </div>
+      <div class="promo-text">Ở cữ An nhiên</div>
+      <div class="promo-sub">Mẹ khỏe, bé ngoan</div>
+      <button class="btn-consult" onclick="toggleChat()">NHẬN TƯ VẤN NGAY</button>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK ACTIONS -->
+<div class="quick-actions">
+  <div class="qa-item">
+    <div class="qa-icon">📞</div>
+    <div>
+      <div class="qa-title">Gọi tổng đài</div>
+      <div class="qa-sub">Tư vấn và giải đáp các vấn đề của bạn</div>
+    </div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-icon">📅</div>
+    <div>
+      <div class="qa-title">Đặt Lịch Hẹn</div>
+      <div class="qa-sub">Đặt lịch hẹn nhanh chóng, tiện lợi</div>
+    </div>
+  </div>
+  <div class="qa-item">
+    <div class="qa-icon">👨‍⚕️</div>
+    <div>
+      <div class="qa-title">Tìm bác sĩ</div>
+      <div class="qa-sub">Tìm kiếm thông tin chuyên gia y tế Vinmec nhanh chóng</div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content-section">
+  <h2 class="section-title">Tại sao nên chọn Vinmec?</h2>
+  <div class="section-underline"></div>
+  <p style="color:var(--gray-400);font-size:13.5px;max-width:600px;">
+    Vinmec là hệ thống y tế đa chuyên khoa với đội ngũ bác sĩ giỏi, trang thiết bị hiện đại và dịch vụ chăm sóc toàn diện.
+    Khám phá các gói thai sản được thiết kế riêng cho mẹ bầu Việt Nam.
+  </p>
+</div>
+
+<!-- ===== CHATBOT FAB ===== -->
+<div class="chatbot-fab">
+  <div class="chatbot-tooltip" id="chatTooltip">💬 Hỏi về gói thai sản</div>
+  <button class="chatbot-btn" id="chatBtn" onclick="toggleChat()">
+    💬
+    <div class="chatbot-ping"></div>
+  </button>
+</div>
+
+<!-- ===== CHATBOT WINDOW ===== -->
+<div class="chatbot-window" id="chatWindow">
+
+  <!-- Header -->
+  <div class="chat-header">
+    <div class="chat-avatar">🤖</div>
+    <div class="chat-header-info">
+      <h3>Trợ lý Thai Sản Vinmec</h3>
+      <div class="chat-status">
+        <div class="status-dot" id="statusDot"></div>
+        <span id="statusText">Đang hoạt động · GPT-powered</span>
+      </div>
+    </div>
+    <div class="chat-header-actions">
+      <button class="chat-icon-btn" onclick="toggleApiPanel()" title="Cài đặt API Key">⚙️</button>
+      <button class="chat-icon-btn" onclick="toggleChat()" title="Đóng">✕</button>
+    </div>
+  </div>
+
+  <!-- API Key Panel -->
+  <div class="api-key-panel" id="apiKeyPanel">
+    <div class="api-key-label">🔑 OpenAI API Key</div>
+    <div class="api-key-row">
+      <input type="password" class="api-key-input" id="apiKeyInput" placeholder="sk-proj-..." />
+      <button class="api-key-save" onclick="saveApiKey()">Lưu</button>
+    </div>
+    <div class="api-model-row">
+      <span class="api-model-label">Model:</span>
+      <select class="api-model-select" id="modelSelect">
+        <option value="gpt-4o-mini">gpt-4o-mini (nhanh, rẻ)</option>
+        <option value="gpt-4o">gpt-4o (mạnh hơn)</option>
+        <option value="gpt-4-turbo">gpt-4-turbo</option>
+      </select>
+    </div>
+    <div class="api-key-status" id="apiKeyStatus"></div>
+  </div>
+
+  <!-- Topic Bar -->
+  <div class="chat-topic-bar">
+    <div class="topic-badge">🤰 Thai Sản</div>
+    <div class="topic-label">Chính sách · Giá · Quyền lợi · Bảo hiểm</div>
+    <button class="topic-reset" onclick="resetConversation()">🔄 Làm mới</button>
+  </div>
+
+  <!-- Messages -->
+  <div class="chat-messages" id="chatMessages">
+    <div class="scroll-anchor" id="scrollAnchor"></div>
+  </div>
+
+  <!-- Input -->
+  <div class="chat-input-area">
+    <textarea class="chat-input" id="chatInput" placeholder="Nhập câu hỏi của bạn..." rows="1"
+      onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+  </div>
+
+  <div class="chat-footer">
+    🔒 Powered by ChatGPT · Knowledge Base Vinmec · Dữ liệu demo
+  </div>
+</div>
+
+<script>
+// =====================================================================
+// KNOWLEDGE BASE – nhúng toàn bộ policies và FAQs vào system prompt
+// =====================================================================
+const POLICIES_DATA = [
+  {"policy_id":"P001","category":"maternity_benefit","title":"Quà tặng mẹ và bé khi sinh tại bệnh viện","summary":"Khách hàng sinh tại bệnh viện được tặng bộ quà mẹ và bé theo chương trình hiện hành.","details":"Khách hàng hoàn tất sinh tại bệnh viện có thể nhận bộ quà dành cho mẹ và bé. Bộ quà thường gồm khăn, bỉm sơ sinh, quần áo sơ sinh, chăn ủ hoặc vật dụng chăm sóc cơ bản. Thành phần quà không cố định tuyệt đối và có thể thay đổi theo từng cơ sở hoặc từng chiến dịch.","conditions":["Áp dụng cho ca sinh hoàn tất tại bệnh viện","Quà tặng phụ thuộc chương trình đang hiệu lực"],"price_info":null},
+  {"policy_id":"P002","category":"maternity_package","title":"Đăng ký gói sinh và thời điểm đăng ký","summary":"Khách hàng có thể đăng ký gói sinh trước ngày dự sinh; càng đăng ký sớm càng thuận tiện.","details":"Khách hàng có thể lựa chọn đăng ký gói thai sản ở các mốc tuần phù hợp như 27 tuần hoặc 36 tuần. Trường hợp chưa quyết định sớm, khách hàng vẫn có thể đăng ký gần ngày sinh nếu hồ sơ và tình trạng chuyên môn cho phép. Nếu không mua gói, khách hàng vẫn có thể làm hồ sơ sinh và nhập viện khi có chỉ định sinh.","conditions":["Cần có hồ sơ thai kỳ cơ bản","Được bác sĩ hoặc nhân viên tư vấn xác nhận điều kiện tiếp nhận"],"price_info":{"package_27w_from":28500000,"package_36w_from":18500000}},
+  {"policy_id":"P003","category":"maternity_package","title":"Gói sinh 27 tuần và 36 tuần","summary":"Gói thai sản 27 tuần và 36 tuần có phạm vi dịch vụ khác nhau theo giai đoạn thai kỳ.","details":"Gói 27 tuần phù hợp với khách hàng bắt đầu theo dõi thai kỳ từ tam cá nguyệt thứ ba sớm, bao gồm khám thai định kỳ, xét nghiệm cơ bản, tư vấn bác sĩ sản và quyền lợi sinh theo gói. Gói 36 tuần phù hợp với khách hàng quyết định sinh tại bệnh viện ở giai đoạn gần ngày dự sinh, tập trung vào hồ sơ nhập viện, theo dõi cuối thai kỳ và quyền lợi sinh cơ bản.","conditions":["Áp dụng cho thai kỳ đơn, tiến triển ổn định trong kịch bản demo"],"price_info":{"package_27w_from":28500000,"package_36w_from":18500000}},
+  {"policy_id":"P004","category":"delivery_cost","title":"Chi phí sinh thường theo gói và ngoài gói","summary":"Sinh thường có thể phát sinh thêm chi phí nếu vượt phạm vi dịch vụ tiêu chuẩn.","details":"Khách hàng sinh thường theo combo hoặc gói sinh thường sẽ được thanh toán theo phạm vi quyền lợi đã đăng ký. Chi phí phát sinh thường xuất hiện khi cần sử dụng thêm thuốc ngoài danh mục tiêu chuẩn, thủ thuật hỗ trợ chuyên môn, nằm viện dài hơn dự kiến hoặc nâng hạng phòng.","price_info":{"normal_delivery_estimate_from":18000000,"normal_delivery_estimate_to":32000000}},
+  {"policy_id":"P005","category":"delivery_cost","title":"Chi phí sinh mổ, mổ lần 2 và phụ thu ngày lễ","summary":"Sinh mổ có mức chi phí cao hơn sinh thường và có thể có phụ thu ngoài giờ hoặc ngày lễ.","details":"Khách hàng sinh mổ được tính chi phí dựa trên loại phòng, phạm vi gói đăng ký, thuốc và vật tư sử dụng, bác sĩ thực hiện và thời điểm thực hiện. Trường hợp sinh mổ lần 2 có thể phát sinh chi phí chuyên môn và theo dõi hậu phẫu cao hơn so với ca sinh mổ lần đầu. Nếu khách hàng chọn ngày mổ trùng ngày lễ hoặc ngoài khung giờ tiêu chuẩn, hệ thống có thể áp dụng phụ thu theo biểu phí hiện hành.","price_info":{"c_section_estimate_from":32000000,"c_section_estimate_to":52000000,"repeat_c_section_estimate_from":38000000,"repeat_c_section_estimate_to":60000000,"holiday_surcharge_percent_from":10,"holiday_surcharge_percent_to":20}},
+  {"policy_id":"P006","category":"admission_process","title":"Sinh không mua gói: làm hồ sơ, tạm ứng, chọn bác sĩ","summary":"Khách hàng không mua gói vẫn có thể sinh tại bệnh viện nếu hoàn tất hồ sơ và tạm ứng theo quy định.","details":"Khách hàng không đăng ký gói trước vẫn có thể đến làm hồ sơ sinh, theo dõi đến ngày dự sinh và nhập viện khi có dấu hiệu chuyển dạ hoặc lịch mổ. Khi nhập viện, bệnh viện có thể yêu cầu tạm ứng theo mức dự kiến của loại sinh và hạng phòng đã chọn.","price_info":{"deposit_normal_delivery_from":10000000,"deposit_c_section_from":20000000}},
+  {"policy_id":"P007","category":"postpartum_care","title":"Hỗ trợ sau sinh cho mẹ và chăm sóc bé","summary":"Điều dưỡng hỗ trợ mẹ sau sinh và hướng dẫn chăm sóc bé trong phạm vi dịch vụ nội trú.","details":"Sau sinh, điều dưỡng hỗ trợ theo dõi dấu hiệu sinh tồn của mẹ, hướng dẫn vệ sinh cá nhân, hỗ trợ vận động sớm, hỗ trợ cho con bú và hướng dẫn chăm sóc sơ sinh cơ bản.","price_info":null},
+  {"policy_id":"P008","category":"room_pricing","title":"Giá phòng nhi tại cơ sở Ocean Park 2 / Hưng Yên","summary":"Giá phòng nhi được tính theo loại phòng và số ngày nằm viện.","details":"Phòng nhi tại cơ sở Ocean Park 2 hoặc khu vực Hưng Yên được chia theo nhóm phòng tiêu chuẩn, phòng riêng và phòng cao cấp. Giá theo ngày chỉ là giá phòng, chưa bao gồm thuốc, xét nghiệm, thủ thuật hoặc bác sĩ khám.","price_info":{"room_standard_per_day":1800000,"room_private_per_day":2600000,"room_premium_per_day":3500000}},
+  {"policy_id":"P009","category":"insurance","title":"Bảo hiểm và đồng chi trả","summary":"Bệnh viện hỗ trợ bảo lãnh hoặc quyết toán theo chính sách đối tác bảo hiểm; khách hàng có thể vẫn phải đồng chi trả.","details":"Khách hàng sử dụng thẻ bảo hiểm sức khỏe như AIA hoặc bảo hiểm đối tác khác có thể được hỗ trợ bảo lãnh viện phí đối với các hạng mục nằm trong phạm vi quyền lợi hợp đồng. Các phần ngoài danh mục được bảo hiểm chấp nhận, phần vượt hạn mức, phần nâng hạng dịch vụ hoặc thuốc vật tư không thuộc hợp đồng sẽ do khách hàng tự chi trả.","price_info":null},
+  {"policy_id":"P010","category":"follow_up","title":"Khám lại cho mẹ và bé sau sinh","summary":"Khách hàng có gói thai sản có thể được bao gồm một số lần tái khám sau sinh theo quyền lợi gói.","details":"Khám lại sau sinh thường gồm đánh giá hồi phục của mẹ, kiểm tra vết mổ hoặc tầng sinh môn, tư vấn nuôi con bú, tư vấn kế hoạch hóa gia đình, theo dõi tăng trưởng cơ bản và đánh giá tình trạng sơ sinh của bé.","price_info":{"follow_up_consultation_from":300000,"follow_up_consultation_to":1200000}},
+  {"policy_id":"P011","category":"admission_checklist","title":"Danh sách đồ cần chuẩn bị khi đi sinh","summary":"Khách hàng nên chuẩn bị đầy đủ hồ sơ cá nhân, đồ dùng cho mẹ và đồ dùng sơ sinh trước ngày nhập viện.","details":"Danh sách chuẩn bị gồm giấy tờ tùy thân, hồ sơ khám thai, thẻ bảo hiểm nếu có, quần áo và vật dụng cá nhân của mẹ, quần áo sơ sinh, bỉm, khăn sữa, khăn ủ, bình nước và vật dụng cần thiết cho thời gian nằm viện.","price_info":null},
+  {"policy_id":"P012","category":"promotion","title":"Ưu đãi tháng 4 cho gói thai sản","summary":"Trong tháng 4, một số gói thai sản có thể áp dụng ưu đãi trực tiếp hoặc quà tặng bổ sung.","details":"Khách hàng đăng ký gói thai sản 27 tuần hoặc 36 tuần trong tháng 4 có thể nhận ưu đãi giảm trực tiếp 5% đến 8% hoặc quà tặng bổ sung cho mẹ và bé. Ưu đãi không cộng dồn với mọi chương trình khác và có thể giới hạn theo số lượng suất đăng ký.","price_info":{"discount_percent_from":5,"discount_percent_to":8}},
+  {"policy_id":"P013","category":"vaccination","title":"Tiêm vaccine RSV và bảng giá vaccine","summary":"Dịch vụ tiêm vaccine được tính theo từng loại vaccine và thời điểm cung ứng.","details":"Khách hàng có thể đăng ký tiêm vaccine RSV hoặc vaccine cho trẻ theo bảng giá hiện hành của trung tâm tiêm chủng. Giá vaccine thay đổi theo loại, hãng, lứa tuổi áp dụng và tình trạng cung ứng.","price_info":{"rsv_vaccine_estimate_from":8500000,"rsv_vaccine_estimate_to":11000000,"general_vaccine_consultation_fee_from":200000}},
+  {"policy_id":"P014","category":"ivf","title":"Tư vấn IVF và chi phí dự kiến","summary":"Chi phí IVF phụ thuộc số chu kỳ, thuốc, xét nghiệm và kỹ thuật hỗ trợ sinh sản sử dụng.","details":"Khách hàng làm IVF sẽ được tư vấn theo từng giai đoạn gồm khám ban đầu, xét nghiệm, kích trứng, chọc hút noãn, tạo phôi, nuôi phôi, chuyển phôi và theo dõi sau chuyển phôi. Tổng chi phí phụ thuộc tình trạng lâm sàng, phác đồ thuốc, số lần thực hiện và kỹ thuật đi kèm.","price_info":{"ivf_consultation_from":500000,"ivf_total_estimate_from":70000000,"ivf_total_estimate_to":130000000}},
+  {"policy_id":"P015","category":"facility_comparison","title":"So sánh cơ sở Times City và Smart City cho dịch vụ sinh","summary":"Hai cơ sở có thể khác nhau về vị trí, hạng phòng, lịch bác sĩ và trải nghiệm dịch vụ.","details":"Khi khách hàng hỏi nên sinh ở Times City hay Smart City, không nên khẳng định cơ sở nào tốt hơn một cách tuyệt đối. Thay vào đó, so sánh theo các tiêu chí như vị trí thuận tiện, hạng phòng mong muốn, bác sĩ theo dõi thai kỳ, lịch mổ hoặc sinh dự kiến, ngân sách và ưu đãi đang áp dụng tại từng cơ sở.","price_info":null},
+  {"policy_id":"P016","category":"doctor_booking","title":"Đăng ký bác sĩ và dịch vụ tư vấn trực tiếp","summary":"Khách hàng có thể yêu cầu tư vấn gói sinh hoặc đặt lịch với bác sĩ tùy tính sẵn có.","details":"Khách hàng có nhu cầu được tư vấn riêng về gói sinh hoặc muốn gắn với bác sĩ cụ thể có thể để lại cơ sở quan tâm, tuần thai hiện tại và hình thức sinh dự kiến để nhân viên xác nhận khả năng tiếp nhận. Việc giữ lịch bác sĩ hoặc chọn bác sĩ không được bảo đảm nếu đăng ký quá sát ngày sinh.","price_info":{"consultation_booking_fee_from":0}}
+];
+
+const SYSTEM_PROMPT = `Bạn là trợ lý tư vấn gói thai sản chính thức của hệ thống bệnh viện Vinmec. Tên bạn là "Trợ lý Vinmec".
+
+## NGUYÊN TẮC CỐT LÕI
+1. CHỈ trả lời dựa trên Knowledge Base bên dưới. KHÔNG bịa thêm thông tin.
+2. Nếu câu hỏi liên quan đến triệu chứng y tế, cấp cứu, hoặc tư vấn y khoa thuần túy → từ chối lịch sự và chuyển hướng.
+3. Nếu không có đủ dữ liệu → thừa nhận và đề xuất liên hệ tư vấn viên.
+4. Ưu tiên Precision (chính xác) hơn Recall. Thà từ chối còn hơn nói sai.
+5. Luôn trả lời bằng tiếng Việt, thân thiện và thấu cảm với mẹ bầu.
+6. Xưng "em", gọi khách hàng là "chị".
+
+## KNOWLEDGE BASE – CHÍNH SÁCH VINMEC
+${JSON.stringify(POLICIES_DATA, null, 2)}
+
+## ĐỊNH DẠNG PHẢN HỒI BẮT BUỘC
+Bạn PHẢI trả lời dưới dạng JSON object duy nhất, KHÔNG có markdown wrapper, theo cấu trúc:
+
+{
+  "type": "<loại phản hồi>",
+  "text": "<nội dung chính, có thể dùng <b>bold</b> và <br> cho xuống dòng>",
+  "policyTags": ["P001", "P002"],
+  "priceTable": {
+    "rows": [
+      {"label": "Tên mục", "val": "Giá trị"}
+    ]
+  },
+  "extraText": "<thông tin bổ sung, HTML inline>",
+  "quickReplies": ["Câu hỏi gợi ý 1", "Câu hỏi gợi ý 2"],
+  "cta": {
+    "primary": "📅 Đặt lịch tư vấn",
+    "secondary": "📞 Gọi hotline"
+  },
+  "hasFeedback": true,
+  "clarifyOptions": ["Lựa chọn 1", "Lựa chọn 2"],
+  "redirectOptions": [
+    {"icon": "📞", "label": "Tên hành động", "sub": "Mô tả"}
+  ],
+  "noSourceOptions": [
+    {"icon": "👩‍💼", "label": "Tên hành động", "sub": "Mô tả"}
+  ],
+  "logDetails": "<chi tiết log nếu type=log>"
+}
+
+## CÁC LOẠI PHẢN HỒI (type)
+- "success": Có đủ thông tin từ KB để trả lời chính xác. Thêm policyTags, priceTable nếu có số liệu. hasFeedback=true.
+- "clarify": Câu hỏi mơ hồ, cần hỏi thêm. Thêm clarifyOptions (3-4 lựa chọn cụ thể).
+- "redirect": Câu hỏi ngoài phạm vi (triệu chứng y tế, khẩn cấp). Thêm redirectOptions.
+- "warning": Có hỏi về chính sách nhưng không đủ dữ liệu trong KB. Thêm noSourceOptions.
+- "normal": Chào hỏi, câu trả lời đơn giản không cần phân loại đặc biệt. Thêm quickReplies để gợi ý câu hỏi.
+- "log": Ghi nhận phản hồi sai từ người dùng. Thêm logDetails và cta.
+
+## QUY TẮC PHÂN LOẠI
+- Câu hỏi về giá, gói, quyền lợi, bảo hiểm, thủ tục → dùng "success" hoặc "clarify"
+- "đau bụng", "ra máu", "triệu chứng", "có nguy hiểm không", "khó thở", "rỉ ối", "cấp cứu" → dùng "redirect"
+- Câu hỏi không có trong KB → dùng "warning"
+- Lần đầu chào hoặc câu hỏi mở → dùng "normal" với quickReplies
+- Khi người dùng nói thông tin sai/không đúng → dùng "log"
+
+## VÍ DỤ
+Câu hỏi: "Gói 27 tuần giá bao nhiêu?"
+→ type=success, policyTags=["P003","P002"], priceTable với giá từ 28.5 triệu, extraText về quyền lợi
+
+Câu hỏi: "Em đau bụng có sao không?"
+→ type=redirect, redirectOptions gồm hotline và đặt lịch bác sĩ
+
+Câu hỏi: "Tôi muốn hỏi về gói sinh" (không rõ tuần thai)
+→ type=clarify, clarifyOptions hỏi tuần thai và mục tiêu
+
+QUAN TRỌNG: Chỉ trả về JSON thuần, không có \`\`\`json hay bất kỳ wrapper nào.`;
+
+// =====================================================================
+// STATE
+// =====================================================================
+let chatOpen = false;
+let apiKey = localStorage.getItem('vinmec_openai_key') || '';
+let selectedModel = localStorage.getItem('vinmec_model') || 'gpt-4o-mini';
+let conversationHistory = [];
+let isProcessing = false;
+
+// =====================================================================
+// INIT
+// =====================================================================
+window.addEventListener('DOMContentLoaded', () => {
+  if (apiKey) {
+    document.getElementById('apiKeyInput').value = apiKey;
+    document.getElementById('apiKeyStatus').textContent = '✅ API key đã được lưu';
+    document.getElementById('apiKeyStatus').className = 'api-key-status ok';
+  }
+  document.getElementById('modelSelect').value = selectedModel;
+
+  // Hide tooltip after 4s
+  setTimeout(() => {
+    const tooltip = document.getElementById('chatTooltip');
+    if (tooltip) {
+      tooltip.style.opacity = '0';
+      tooltip.style.transition = 'opacity 0.5s';
+      setTimeout(() => { tooltip.style.display = 'none'; }, 500);
+    }
+  }, 4000);
+});
+
+// =====================================================================
+// API KEY MANAGEMENT
+// =====================================================================
+function saveApiKey() {
+  const val = document.getElementById('apiKeyInput').value.trim();
+  const model = document.getElementById('modelSelect').value;
+  const statusEl = document.getElementById('apiKeyStatus');
+
+  if (!val.startsWith('sk-')) {
+    statusEl.textContent = '❌ API key không hợp lệ (phải bắt đầu bằng sk-)';
+    statusEl.className = 'api-key-status err';
+    return;
+  }
+
+  apiKey = val;
+  selectedModel = model;
+  localStorage.setItem('vinmec_openai_key', apiKey);
+  localStorage.setItem('vinmec_model', selectedModel);
+
+  statusEl.textContent = '✅ Đã lưu! Chatbot sẵn sàng dùng AI thực sự.';
+  statusEl.className = 'api-key-status ok';
+
+  setTimeout(() => toggleApiPanel(), 1200);
+}
+
+function toggleApiPanel() {
+  const panel = document.getElementById('apiKeyPanel');
+  panel.classList.toggle('open');
+}
+
+// =====================================================================
+// TOGGLE CHAT
+// =====================================================================
+function toggleChat() {
+  chatOpen = !chatOpen;
+  const win = document.getElementById('chatWindow');
+  const tooltip = document.getElementById('chatTooltip');
+
+  if (chatOpen) {
+    win.style.display = 'flex';
+    win.style.flexDirection = 'column';
+    win.style.animation = 'slideUp 0.3s ease';
+    tooltip.style.display = 'none';
+    if (conversationHistory.length === 0) {
+      showWelcomeMessage();
+    }
+  } else {
+    win.style.display = 'none';
+    tooltip.style.display = 'block';
+  }
+}
+
+// =====================================================================
+// WELCOME MESSAGE
+// =====================================================================
+function showWelcomeMessage() {
+  const now = new Date();
+  const timeStr = `Hôm nay, ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+  appendTimeStamp(timeStr);
+
+  renderBotMessage({
+    type: 'normal',
+    text: 'Xin chào chị! 👋 Em là trợ lý tư vấn gói thai sản của Vinmec.<br><br>Em có thể hỗ trợ chị về <b>gói thai sản, giá dịch vụ, quyền lợi, điều kiện đăng ký và bảo hiểm</b>. Chị cần hỏi gì ạ?',
+    quickReplies: [
+      '💰 Gói 27 tuần giá bao nhiêu?',
+      '📦 So sánh gói 27 và 36 tuần',
+      '🏥 Chi phí sinh thường bao nhiêu?',
+      '🎁 Ưu đãi tháng 4 có gì?',
+      '🔒 Bảo hiểm AIA được bảo lãnh không?'
+    ]
+  });
+}
+
+// =====================================================================
+// RESET CONVERSATION
+// =====================================================================
+function resetConversation() {
+  conversationHistory = [];
+  document.getElementById('chatMessages').innerHTML = '<div class="scroll-anchor" id="scrollAnchor"></div>';
+  showWelcomeMessage();
+}
+
+// =====================================================================
+// SEND MESSAGE
+// =====================================================================
+async function sendMessage() {
+  if (isProcessing) return;
+
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  autoResize(input);
+
+  // Render user message
+  appendUserMessage(text);
+  scrollToBottom();
+
+  // Check API key
+  if (!apiKey) {
+    showApiKeyPrompt();
+    return;
+  }
+
+  // Show typing
+  isProcessing = true;
+  setSendBtnState(false);
+  const typingEl = appendTypingIndicator();
+  scrollToBottom();
+
+  try {
+    const responseData = await callOpenAI(text);
+    typingEl.remove();
+    renderBotMessage(responseData);
+  } catch (err) {
+    typingEl.remove();
+    renderBotMessage({
+      type: 'warning',
+      text: '⚠️ <b>Không thể kết nối ChatGPT.</b><br>' + sanitizeError(err.message),
+      noSourceOptions: [
+        { icon: '🔑', label: 'Kiểm tra API Key', sub: 'Nhấn ⚙️ để cập nhật key' },
+        { icon: '📞', label: 'Gọi hotline Vinmec', sub: '1900 232 389' }
+      ]
+    });
+  } finally {
+    isProcessing = false;
+    setSendBtnState(true);
+    scrollToBottom();
+  }
+}
+
+function sanitizeError(msg) {
+  if (!msg) return 'Lỗi không xác định.';
+  if (msg.includes('401')) return 'API key không hợp lệ hoặc đã hết hạn.';
+  if (msg.includes('429')) return 'Vượt quá giới hạn request. Vui lòng thử lại sau.';
+  if (msg.includes('500') || msg.includes('503')) return 'Lỗi máy chủ OpenAI. Vui lòng thử lại sau.';
+  if (msg.includes('Failed to fetch') || msg.includes('network')) return 'Lỗi kết nối mạng.';
+  return msg.substring(0, 120);
+}
+
+function showApiKeyPrompt() {
+  renderBotMessage({
+    type: 'warning',
+    text: '🔑 <b>Chưa có API Key.</b><br>Để dùng AI thực sự, chị vui lòng nhấn ⚙️ trên thanh tiêu đề và nhập OpenAI API Key.',
+    noSourceOptions: [
+      { icon: '⚙️', label: 'Mở cài đặt API Key', sub: 'Nhấn ⚙️ góc trên bên phải cửa sổ chat' }
+    ]
+  });
+  setTimeout(() => toggleApiPanel(), 500);
+}
+
+// =====================================================================
+// CALL OPENAI API
+// =====================================================================
+async function callOpenAI(userMessage) {
+  // Add to conversation history
+  conversationHistory.push({ role: 'user', content: userMessage });
+
+  const body = {
+    model: selectedModel,
+    messages: [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...conversationHistory
+    ],
+    response_format: { type: 'json_object' },
+    temperature: 0.3,
+    max_tokens: 1000
+  };
+
+  const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${apiKey}`
+    },
+    body: JSON.stringify(body)
+  });
+
+  if (!resp.ok) {
+    const errData = await resp.json().catch(() => ({}));
+    throw new Error(`HTTP ${resp.status}: ${errData.error?.message || resp.statusText}`);
+  }
+
+  const data = await resp.json();
+  const content = data.choices[0].message.content;
+
+  // Add assistant response to history
+  conversationHistory.push({ role: 'assistant', content });
+
+  // Parse JSON
+  try {
+    return JSON.parse(content);
+  } catch {
+    return { type: 'normal', text: content };
+  }
+}
+
+// =====================================================================
+// RENDER HELPERS
+// =====================================================================
+function appendTimeStamp(text) {
+  const anchor = document.getElementById('scrollAnchor');
+  const el = document.createElement('div');
+  el.className = 'msg-time';
+  el.textContent = text;
+  anchor.parentNode.insertBefore(el, anchor);
+}
+
+function appendUserMessage(text) {
+  const anchor = document.getElementById('scrollAnchor');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg user';
+  wrap.innerHTML = `<div class="bubble user">${escHtml(text)}</div>`;
+  animateIn(wrap);
+  anchor.parentNode.insertBefore(wrap, anchor);
+}
+
+function appendTypingIndicator() {
+  const anchor = document.getElementById('scrollAnchor');
+  const el = document.createElement('div');
+  el.className = 'msg bot';
+  el.innerHTML = `<div class="msg-avatar">🤖</div>
+    <div class="bubble bot">
+      <div class="typing-indicator">
+        <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+      </div>
+    </div>`;
+  anchor.parentNode.insertBefore(el, anchor);
+  return el;
+}
+
+function renderBotMessage(msg) {
+  const anchor = document.getElementById('scrollAnchor');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg bot';
+
+  let bubbleClass = 'bot';
+  if (msg.type === 'success') bubbleClass = 'bot success';
+  else if (msg.type === 'warning') bubbleClass = 'bot warning';
+  else if (msg.type === 'redirect') bubbleClass = 'bot redirect';
+  else if (msg.type === 'log') bubbleClass = 'bot warning';
+
+  let inner = '';
+
+  // Label
+  if (msg.type === 'success') inner += `<div class="bubble-label">✅ Có nguồn chính thức</div>`;
+  else if (msg.type === 'warning') inner += `<div class="bubble-label">⚠️ Không đủ nguồn</div>`;
+  else if (msg.type === 'redirect') inner += `<div class="bubble-label">🔀 Ngoài phạm vi</div>`;
+  else if (msg.type === 'log') inner += `<div class="bubble-label">📝 Ghi nhận phản hồi</div>`;
+  else if (msg.type === 'clarify') inner += `<div class="bubble-label">❓ Cần làm rõ</div>`;
+
+  // Main text
+  if (msg.text) inner += `<div>${msg.text}</div>`;
+
+  // Policy tags
+  if (msg.policyTags && msg.policyTags.length > 0) {
+    inner += `<div style="margin-top:8px">`;
+    msg.policyTags.forEach(pid => {
+      const p = POLICIES_DATA.find(x => x.policy_id === pid);
+      inner += `<span class="policy-tag">📋 ${pid}: ${p ? p.title : pid}</span>`;
+    });
+    inner += `</div>`;
+  }
+
+  // Price table
+  if (msg.priceTable && msg.priceTable.rows && msg.priceTable.rows.length > 0) {
+    inner += `<div class="price-highlight">`;
+    msg.priceTable.rows.forEach(r => {
+      inner += `<div class="price-row"><span class="price-label">${r.label}</span><span class="price-val">${r.val}</span></div>`;
+    });
+    inner += `</div>`;
+  }
+
+  // Extra text
+  if (msg.extraText) inner += `<div style="margin-top:8px;font-size:12.5px">${msg.extraText}</div>`;
+
+  // Quick replies
+  if (msg.quickReplies && msg.quickReplies.length > 0) {
+    inner += `<div class="quick-replies">`;
+    msg.quickReplies.forEach(qr => {
+      inner += `<button class="qr-btn" onclick="handleQuickReply(${JSON.stringify(qr)})">${qr}</button>`;
+    });
+    inner += `</div>`;
+  }
+
+  // CTA buttons
+  if (msg.cta) {
+    inner += `<div class="chat-cta">`;
+    if (msg.cta.primary) inner += `<button class="cta-primary" onclick="ctaClick(${JSON.stringify(msg.cta.primary)})">${msg.cta.primary}</button>`;
+    if (msg.cta.secondary) inner += `<button class="cta-secondary" onclick="ctaClick(${JSON.stringify(msg.cta.secondary)})">${msg.cta.secondary}</button>`;
+    inner += `</div>`;
+  }
+
+  // Feedback
+  if (msg.hasFeedback) {
+    inner += `<div class="feedback-row">
+      <span class="feedback-label">Thông tin có hữu ích không?</span>
+      <button class="fb-btn" onclick="handleFeedback(true,this)">👍 Đúng</button>
+      <button class="fb-btn wrong" onclick="handleFeedback(false,this)">👎 Sai</button>
+    </div>`;
+  }
+
+  // Clarify options
+  if (msg.type === 'clarify' && msg.clarifyOptions && msg.clarifyOptions.length > 0) {
+    inner += `<div class="clarify-form">
+      <label>Chị có thể cho em biết thêm:</label>
+      <div class="clarify-options">`;
+    msg.clarifyOptions.forEach(opt => {
+      inner += `<button class="clarify-opt" onclick="handleQuickReply(${JSON.stringify(opt)})">${opt}</button>`;
+    });
+    inner += `</div></div>`;
+  }
+
+  // Redirect options
+  if (msg.redirectOptions && msg.redirectOptions.length > 0) {
+    inner += `<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px;">`;
+    msg.redirectOptions.forEach(opt => {
+      inner += `<div style="display:flex;align-items:center;gap:10px;background:white;border:1px solid #fecaca;border-radius:10px;padding:9px 12px;cursor:pointer;" onclick="ctaClick(${JSON.stringify(opt.label)})">
+        <span style="font-size:18px">${opt.icon}</span>
+        <div><div style="font-size:12.5px;font-weight:700;color:#991b1b">${opt.label}</div><div style="font-size:11px;color:#9ca3af">${opt.sub}</div></div>
+      </div>`;
+    });
+    inner += `</div>`;
+  }
+
+  // No source options
+  if (msg.noSourceOptions && msg.noSourceOptions.length > 0) {
+    inner += `<div style="margin-top:10px;display:flex;flex-direction:column;gap:7px;">`;
+    msg.noSourceOptions.forEach(opt => {
+      inner += `<div style="display:flex;align-items:center;gap:10px;background:white;border:1px solid #fed7aa;border-radius:10px;padding:9px 12px;">
+        <span style="font-size:18px">${opt.icon}</span>
+        <div><div style="font-size:12.5px;font-weight:700;color:#9a3412">${opt.label}</div><div style="font-size:11px;color:#9ca3af">${opt.sub}</div></div>
+      </div>`;
+    });
+    inner += `</div>`;
+  }
+
+  // Log details
+  if (msg.type === 'log' && msg.logDetails) {
+    inner += `<div class="log-notice">
+      <div class="log-notice-icon">📋</div>
+      <div>${msg.logDetails}</div>
+    </div>`;
+  }
+
+  wrap.innerHTML = `<div class="msg-avatar">🤖</div><div class="bubble ${bubbleClass}">${inner}</div>`;
+  animateIn(wrap);
+  anchor.parentNode.insertBefore(wrap, anchor);
+}
+
+function animateIn(el) {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(8px)';
+  el.style.transition = 'all 0.25s ease';
+  requestAnimationFrame(() => {
+    el.style.opacity = '1';
+    el.style.transform = 'translateY(0)';
+  });
+}
+
+// =====================================================================
+// EVENT HANDLERS
+// =====================================================================
+function handleQuickReply(text) {
+  document.getElementById('chatInput').value = text;
+  sendMessage();
+}
+
+function ctaClick(label) {
+  const anchor = document.getElementById('scrollAnchor');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg bot';
+  wrap.innerHTML = `<div class="msg-avatar">🤖</div><div class="bubble bot" style="font-size:12.5px">Đã ghi nhận yêu cầu "<b>${escHtml(label)}</b>". Tư vấn viên sẽ liên hệ chị sớm nhất! 👋</div>`;
+  animateIn(wrap);
+  anchor.parentNode.insertBefore(wrap, anchor);
+  scrollToBottom();
+}
+
+function handleFeedback(correct, btn) {
+  const row = btn.closest('.feedback-row');
+  if (correct) {
+    row.innerHTML = '<span style="color:#16a34a;font-size:12px">✅ Cảm ơn phản hồi của chị!</span>';
+  } else {
+    row.innerHTML = '<span style="color:#dc2626;font-size:12px">📝 Đã ghi nhận – nhân viên sẽ review và cập nhật KB</span>';
+    renderBotMessage({
+      type: 'log',
+      text: 'Cảm ơn chị đã phản hồi! Em đã ghi nhận thông tin này.',
+      logDetails: 'Phản hồi của chị sẽ được nhân viên Vinmec xem xét và cập nhật lại Knowledge Base để cải thiện câu trả lời cho các lượt sau.',
+      cta: { primary: '👩‍💼 Kết nối tư vấn viên', secondary: '📞 Gọi hotline' }
+    });
+    scrollToBottom();
+  }
+}
+
+function setSendBtnState(enabled) {
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = !enabled;
+}
+
+// =====================================================================
+// UTILS
+// =====================================================================
+function scrollToBottom() {
+  const container = document.getElementById('chatMessages');
+  container.scrollTop = container.scrollHeight;
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+}
+
+function escHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+</script>
+</body>
+</html>
