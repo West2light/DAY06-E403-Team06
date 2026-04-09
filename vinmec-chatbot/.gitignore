@@ -1,0 +1,4 @@
+.env
+__pychache__/
+venv/
+backend/feedback_log.jsonl
