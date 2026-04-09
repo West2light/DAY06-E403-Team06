@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vinmec Chatbot – Luồng Xử Lý Chính Sách Thai Sản</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f1f5f9; padding: 30px 20px; }
+
+  .page { max-width: 980px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #00536e, #0891b2);
+    color: white; border-radius: 14px; padding: 20px 30px;
+    display: flex; align-items: center; gap: 16px; margin-bottom: 32px;
+    box-shadow: 0 4px 16px rgba(0,83,110,0.25);
+  }
+  .header img { width: 54px; height: 54px; border-radius: 10px; background: white; padding: 6px; }
+  .header h1 { font-size: 20px; font-weight: 700; }
+  .header p { font-size: 13px; opacity: 0.85; margin-top: 3px; }
+
+  /* Flow grid */
+  .flow { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+  /* Node types */
+  .node {
+    width: 360px; border-radius: 12px; padding: 14px 20px; text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08); position: relative;
+  }
+  .node-title { font-size: 14px; font-weight: 700; }
+  .node-sub { font-size: 12px; margin-top: 4px; opacity: 0.8; }
+
+  .node-start   { background: #0891b2; color: white; }
+  .node-end     { background: #14532d; color: white; border-radius: 30px; }
+  .node-action  { background: #dcfce7; border: 2px solid #16a34a; color: #14532d; }
+  .node-answer  { background: #0891b2; color: white; }
+
+  /* Diamond */
+  .diamond-wrap { width: 420px; display: flex; justify-content: center; }
+  .diamond {
+    width: 260px; height: 260px; position: relative; margin: -20px 0;
+  }
+  .diamond-inner {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(45deg);
+    width: 170px; height: 170px; background: #fef3c7; border: 2.5px solid #f59e0b;
+    box-shadow: 0 2px 10px rgba(245,158,11,0.2);
+  }
+  .diamond-text {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    text-align: center; width: 180px; font-size: 12.5px; font-weight: 700; color: #92400e;
+    line-height: 1.5;
+  }
+
+  /* Connector */
+  .connector {
+    width: 2px; background: #94a3b8; margin: 0 auto;
+  }
+  .connector.green { background: #16a34a; }
+  .connector.red   { background: #dc2626; }
+
+  /* Arrow */
+  .arrow-down {
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 10px solid #94a3b8;
+    margin: 0 auto;
+  }
+  .arrow-down.green { border-top-color: #16a34a; }
+  .arrow-down.red   { border-top-color: #dc2626; }
+
+  /* Branch layout */
+  .branch-row {
+    display: flex; align-items: flex-start; gap: 0; width: 100%; justify-content: center;
+    margin: 0;
+  }
+  .branch-center { display: flex; flex-direction: column; align-items: center; }
+  .branch-side {
+    display: flex; flex-direction: column; align-items: center;
+    min-width: 170px;
+  }
+
+  /* Side nodes */
+  .side-node {
+    width: 155px; border-radius: 10px; padding: 11px 12px; text-align: center;
+    font-size: 11.5px; font-weight: 700; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .side-node.red   { background: #fee2e2; border: 1.5px solid #dc2626; color: #991b1b; }
+  .side-node.purple{ background: #ede9fe; border: 1.5px solid #7c3aed; color: #5b21b6; }
+  .side-node-sub { font-size: 10.5px; font-weight: 400; margin-top: 4px; line-height: 1.4; }
+
+  /* Horizontal connector */
+  .h-line { height: 2px; background: #dc2626; flex: 1; align-self: center; max-width: 60px; }
+  .h-line.purple { background: #7c3aed; }
+  .h-arrow-right {
+    width: 0; height: 0; align-self: center;
+    border-top: 7px solid transparent; border-bottom: 7px solid transparent;
+    border-left: 9px solid #dc2626;
+  }
+  .h-arrow-left {
+    width: 0; height: 0; align-self: center;
+    border-top: 7px solid transparent; border-bottom: 7px solid transparent;
+    border-right: 9px solid #7c3aed;
+  }
+
+  /* Label on arrow */
+  .label {
+    font-size: 11px; font-weight: 700; color: #16a34a; margin: 2px 0;
+  }
+  .label.red { color: #dc2626; }
+  .label.purple { color: #7c3aed; }
+
+  .spacer { height: 6px; }
+  .spacer-sm { height: 3px; }
+
+  /* Legend */
+  .legend {
+    margin-top: 36px; background: white; border-radius: 12px;
+    padding: 20px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .legend h3 { font-size: 13px; color: #475569; margin-bottom: 14px; font-weight: 700; }
+  .legend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #475569; }
+  .legend-box { width: 22px; height: 22px; border-radius: 5px; flex-shrink: 0; }
+  .legend-diamond {
+    width: 18px; height: 18px; flex-shrink: 0;
+    background: #fef3c7; border: 2px solid #f59e0b;
+    transform: rotate(45deg); border-radius: 2px;
+  }
+
+  /* Step label badges */
+  .step-badge {
+    position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+    background: white; border: 2px solid #0891b2; color: #0891b2;
+    font-size: 10px; font-weight: 700; padding: 1px 8px; border-radius: 20px;
+  }
+  .step-badge.green { border-color: #16a34a; color: #16a34a; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <div style="font-size:28px; margin-bottom:4px;">🏥</div>
+    </div>
+    <div>
+      <h1>Vinmec Chatbot – Luồng Xử Lý Chính Sách Thai Sản</h1>
+      <p>Quy trình tự động nhận diện, phân loại và trả lời câu hỏi về gói thai sản</p>
+    </div>
+  </div>
+
+  <!-- FLOW -->
+  <div class="flow">
+
+    <!-- Node 1: User input -->
+    <div class="node node-start" style="position:relative;">
+      <div class="step-badge" style="border-color:white;color:#0891b2;background:#0891b2;color:white;">Bước 1</div>
+      <div class="node-title">👤 User gửi câu hỏi</div>
+      <div class="node-sub">về chính sách thai sản Vinmec<br><span style="font-size:11px; opacity:0.75;">(gói thai sản, giá, quyền lợi, điều kiện, bảo hiểm...)</span></div>
+    </div>
+
+    <div class="connector" style="height:24px;"></div>
+    <div class="arrow-down"></div>
+    <div class="spacer"></div>
+
+    <!-- Diamond 1: In scope? -->
+    <div class="branch-row">
+      <!-- LEFT side (out of scope) -->
+      <div class="branch-side" style="justify-content: center; margin-top: 60px; margin-right: 0;">
+        <div style="display:flex; align-items:center; gap:0;">
+          <div class="h-line" style="width:36px;"></div>
+          <div class="h-arrow-right"></div>
+        </div>
+        <div class="label red" style="font-size:10px; margin-top:-2px;">Ngoài phạm vi</div>
+        <div class="side-node red">
+          🔀 Điều hướng
+          <div class="side-node-sub">Chuyển sang bác sĩ hoặc nhân viên hỗ trợ phù hợp</div>
+        </div>
+      </div>
+
+      <!-- CENTER: diamond -->
+      <div class="branch-center">
+        <div style="position:relative; width:280px; height:120px; display:flex; align-items:center; justify-content:center;">
+          <div style="width:140px; height:140px; background:#fef3c7; border: 2.5px solid #f59e0b; transform:rotate(45deg); position:absolute; border-radius:4px; box-shadow:0 2px 8px rgba(245,158,11,0.15);"></div>
+          <div style="position:relative; z-index:2; text-align:center; font-size:12px; font-weight:700; color:#92400e; line-height:1.5;">
+            ❓ Câu hỏi thuộc<br>phạm vi chính sách<br>thai sản không?
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: spacer for symmetry -->
+      <div class="branch-side" style="min-width:170px;"></div>
+    </div>
+
+    <div class="label green" style="margin-top:-4px;">✓ Đúng phạm vi</div>
+    <div class="connector green" style="height:18px;"></div>
+    <div class="arrow-down green"></div>
+    <div class="spacer"></div>
+
+    <!-- Diamond 2: Enough info? -->
+    <div class="branch-row">
+      <!-- LEFT side (ambiguous → clarify) -->
+      <div class="branch-side" style="justify-content: center; margin-top: 56px; margin-right: 0;">
+        <div style="display:flex; align-items:center; gap:0;">
+          <div class="h-line purple" style="width:36px;"></div>
+          <div class="h-arrow-right" style="border-left-color:#7c3aed;"></div>
+        </div>
+        <div class="label purple" style="font-size:10px; margin-top:-2px;">Chưa rõ ràng</div>
+        <div class="side-node purple">
+          ❓ Hỏi làm rõ
+          <div class="side-node-sub" style="color:#5b21b6;">Gói nào? Tuần thai? Loại bảo hiểm? → User phản hồi → quay lại</div>
+        </div>
+      </div>
+
+      <div class="branch-center">
+        <div style="position:relative; width:280px; height:120px; display:flex; align-items:center; justify-content:center;">
+          <div style="width:140px; height:140px; background:#fef3c7; border: 2.5px solid #f59e0b; transform:rotate(45deg); position:absolute; border-radius:4px; box-shadow:0 2px 8px rgba(245,158,11,0.15);"></div>
+          <div style="position:relative; z-index:2; text-align:center; font-size:12px; font-weight:700; color:#92400e; line-height:1.5;">
+            📋 Câu hỏi đủ thông tin<br>để truy vấn<br>chính xác không?
+          </div>
+        </div>
+      </div>
+      <div class="branch-side" style="min-width:170px;"></div>
+    </div>
+
+    <div class="label green" style="margin-top:-4px;">✓ Đủ dữ liệu</div>
+    <div class="connector green" style="height:18px;"></div>
+    <div class="arrow-down green"></div>
+    <div class="spacer"></div>
+
+    <!-- Node: KB retrieval -->
+    <div class="node node-action" style="position:relative;">
+      <div class="step-badge green">Bước 3</div>
+      <div class="node-title">🔍 Truy xuất Knowledge Base</div>
+      <div class="node-sub">Tìm kiếm chính sách chính thức của Vinmec về gói thai sản</div>
+    </div>
+
+    <div class="connector green" style="height:24px;"></div>
+    <div class="arrow-down green"></div>
+    <div class="spacer"></div>
+
+    <!-- Diamond 3: Confident answer? -->
+    <div class="branch-row">
+      <!-- RIGHT: no confident source -->
+      <div class="branch-side" style="min-width:170px;"></div>
+
+      <div class="branch-center">
+        <div style="position:relative; width:280px; height:120px; display:flex; align-items:center; justify-content:center;">
+          <div style="width:140px; height:140px; background:#fef3c7; border: 2.5px solid #f59e0b; transform:rotate(45deg); position:absolute; border-radius:4px; box-shadow:0 2px 8px rgba(245,158,11,0.15);"></div>
+          <div style="position:relative; z-index:2; text-align:center; font-size:12px; font-weight:700; color:#92400e; line-height:1.5;">
+            🔎 Tìm được nguồn<br>chính thức đủ<br>tin cậy không?
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT side -->
+      <div class="branch-side" style="justify-content: center; margin-top: 56px; margin-left: 0;">
+        <div style="display:flex; align-items:center; gap:0;">
+          <div class="h-arrow-right" style="border-left-color:#dc2626;"></div>
+          <div class="h-line" style="width:36px;"></div>
+        </div>
+        <div class="label red" style="font-size:10px; margin-top:-2px;">Không chắc chắn</div>
+        <div class="side-node red">
+          ⚠️ Thông báo rõ
+          <div class="side-node-sub">Chưa xác nhận được, chuyển sang tư vấn viên thật</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="label green" style="margin-top:-4px;">✓ Có nguồn chính thức</div>
+    <div class="connector green" style="height:18px;"></div>
+    <div class="arrow-down green"></div>
+    <div class="spacer"></div>
+
+    <!-- Node: Generate answer -->
+    <div class="node node-answer" style="position:relative;">
+      <div class="step-badge" style="background:#0891b2;color:white;border-color:white;">Bước 4</div>
+      <div class="node-title">💬 Tạo câu trả lời ngắn gọn, rõ ràng</div>
+      <div class="node-sub">
+        Quyền lợi · Giá · Điều kiện đăng ký · Bảo hiểm áp dụng<br>
+        <span style="font-size:11px;">+ Gợi ý: Xem chi tiết gói hoặc liên hệ tư vấn viên</span>
+      </div>
+    </div>
+
+    <div class="connector" style="height:24px;"></div>
+    <div class="arrow-down"></div>
+    <div class="spacer"></div>
+
+    <!-- Diamond 4: User satisfied? -->
+    <div class="branch-row">
+      <div class="branch-side" style="min-width:170px;"></div>
+
+      <div class="branch-center">
+        <div style="position:relative; width:280px; height:120px; display:flex; align-items:center; justify-content:center;">
+          <div style="width:140px; height:140px; background:#fef3c7; border: 2.5px solid #f59e0b; transform:rotate(45deg); position:absolute; border-radius:4px; box-shadow:0 2px 8px rgba(245,158,11,0.15);"></div>
+          <div style="position:relative; z-index:2; text-align:center; font-size:12px; font-weight:700; color:#92400e; line-height:1.5;">
+            😊 User hài lòng<br>với câu trả lời<br>không?
+          </div>
+        </div>
+      </div>
+
+      <div class="branch-side" style="justify-content: center; margin-top: 56px; margin-left: 0;">
+        <div style="display:flex; align-items:center; gap:0;">
+          <div class="h-arrow-right" style="border-left-color:#dc2626;"></div>
+          <div class="h-line" style="width:36px;"></div>
+        </div>
+        <div class="label red" style="font-size:10px; margin-top:-2px;">Không đúng</div>
+        <div class="side-node red">
+          📝 Ghi nhận log
+          <div class="side-node-sub">Nhân viên Vinmec review, cập nhật Knowledge Base, cải thiện cho lượt sau</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="label green" style="margin-top:-4px;">✓ Hài lòng</div>
+    <div class="connector green" style="height:18px;"></div>
+    <div class="arrow-down green"></div>
+    <div class="spacer"></div>
+
+    <!-- END -->
+    <div class="node node-end">
+      <div class="node-title">✅ Kết thúc luồng</div>
+      <div class="node-sub">User tiếp tục xem thông tin gói hoặc để lại nhu cầu tư vấn</div>
+    </div>
+
+  </div><!-- end flow -->
+
+  <!-- Legend -->
+  <div class="legend">
+    <h3>📌 Chú thích màu sắc</h3>
+    <div class="legend-grid">
+      <div class="legend-item">
+        <div class="legend-box" style="background:#0891b2;"></div>
+        Hành động chính / Bước thực hiện
+      </div>
+      <div class="legend-item">
+        <div class="legend-box" style="background:#fef3c7; border:2px solid #f59e0b;"></div>
+        Điểm quyết định (phân nhánh)
+      </div>
+      <div class="legend-item">
+        <div class="legend-box" style="background:#dcfce7; border:2px solid #16a34a;"></div>
+        Xử lý dữ liệu / KB
+      </div>
+      <div class="legend-item">
+        <div class="legend-box" style="background:#fee2e2; border:2px solid #dc2626;"></div>
+        Điều hướng / Xử lý ngoại lệ
+      </div>
+      <div class="legend-item">
+        <div class="legend-box" style="background:#ede9fe; border:2px solid #7c3aed;"></div>
+        Làm rõ câu hỏi (vòng lặp)
+      </div>
+      <div class="legend-item">
+        <div class="legend-box" style="background:#14532d;border-radius:20px;"></div>
+        Kết thúc luồng thành công
+      </div>
+    </div>
+    <p style="margin-top:14px; font-size:11px; color:#94a3b8; border-top:1px solid #f1f5f9; padding-top:12px;">
+      💡 KB = Knowledge Base chính sách Vinmec · Mọi câu trả lời đều phải bám sát nguồn chính thức · Không tự suy diễn khi chưa có dữ liệu
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
