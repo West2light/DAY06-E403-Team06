@@ -36,7 +36,7 @@ DEFAULT_NO_SOURCE_OPTIONS = [
 WELCOME_QUICK_REPLIES = [
     "💰 Gói 27 tuần giá bao nhiêu?",
     "📦 So sánh gói 27 và 36 tuần",
-    "📅 Đặt lịch tư vấn",
+    "🔒 Quyền lợi bảo hiểm",
 ]
 
 # ---------------------------------------------------------------------------
@@ -63,6 +63,56 @@ class VinmecAgent:
         self.conversation.clear()
         self.last_user_message = ""
         self.last_response_payload = {}
+
+    @staticmethod
+    def _normalize_quick_replies(data: dict) -> None:
+        """Giữ quick replies ngắn gọn và không lặp ý với CTA bên dưới."""
+        quick_replies = data.get("quick_replies")
+        if not isinstance(quick_replies, list):
+            return
+
+        cta_values: list[str] = []
+        cta = data.get("cta")
+        if isinstance(cta, dict):
+            cta_values = [
+                str(v).lower().strip()
+                for v in cta.values()
+                if isinstance(v, str) and v.strip()
+            ]
+
+        normalized: list[str] = []
+        seen: set[str] = set()
+
+        for item in quick_replies:
+            if not isinstance(item, str):
+                continue
+
+            label = item.strip()
+            if not label:
+                continue
+
+            lower_label = label.lower()
+
+            # Không lặp lại ý CTA như đặt lịch / hotline ở phần nút bên dưới
+            if "đặt lịch" in lower_label or "hotline" in lower_label:
+                continue
+
+            if any(lower_label == cta_text for cta_text in cta_values):
+                continue
+
+            if lower_label in seen:
+                continue
+
+            seen.add(lower_label)
+            normalized.append(label)
+
+            if len(normalized) == 3:
+                break
+
+        if normalized:
+            data["quick_replies"] = normalized
+        else:
+            data.pop("quick_replies", None)
 
     def get_welcome_message(self) -> dict:
         """Trả về tin nhắn chào hỏi khi bắt đầu phiên."""
@@ -169,5 +219,7 @@ class VinmecAgent:
                 "primary": "📅 Đặt lịch tư vấn",
                 "secondary": "📞 Gọi hotline",
             })
+
+        self._normalize_quick_replies(data)
 
         return data

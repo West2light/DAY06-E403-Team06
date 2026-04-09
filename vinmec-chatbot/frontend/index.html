@@ -1,304 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vinmec Healthcare System – AI Chatbot</title>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --teal: #00748a; --teal-dark: #00536e; --teal-light: #e0f4f7;
-  --gold: #c8972b; --green: #2eaa6e; --red: #e03e3e; --orange: #f07c20;
-  --purple: #5b21b6; --purple-light: #f8f3ff; --purple-border: #c4b5fd;
-  --gray-50: #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0;
-  --gray-400: #94a3b8; --gray-600: #475569; --gray-800: #1e293b;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Be Vietnam Pro', sans-serif; background: #f1f5f9; color: var(--gray-800); }
-
-/* ── PAGE ── */
-.top-bar { background: var(--teal-dark); color: white; font-size: 12.5px; display: flex; justify-content: flex-end; gap: 24px; padding: 6px 40px; }
-.top-bar a { color: #bfe8f0; text-decoration: none; }
-.top-bar a:hover { color: white; }
-.main-header { background: white; display: flex; align-items: center; justify-content: space-between; padding: 12px 40px; border-bottom: 1px solid var(--gray-200); box-shadow: 0 1px 6px rgba(0,0,0,.07); }
-.logo { display: flex; align-items: center; gap: 6px; }
-.logo-text { font-size: 22px; font-weight: 700; color: var(--teal-dark); letter-spacing: 1px; }
-.logo-sub { font-size: 8px; color: var(--gold); letter-spacing: 2px; font-weight: 600; }
-.search-bar { display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--gray-200); border-radius: 24px; padding: 7px 16px; background: var(--gray-50); width: 280px; font-size: 13px; color: var(--gray-400); }
-.header-actions { display: flex; align-items: center; gap: 14px; }
-.btn-calendar { border: 1.5px solid var(--teal); color: var(--teal); border-radius: 8px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; cursor: pointer; background: white; }
-.flag-badge { background: var(--gray-100); border-radius: 6px; padding: 5px 8px; font-size: 13px; }
-nav { background: white; border-bottom: 1px solid var(--gray-100); display: flex; justify-content: center; gap: 36px; padding: 0 40px; }
-nav a { color: var(--gray-600); text-decoration: none; font-size: 13.5px; font-weight: 500; padding: 14px 0; border-bottom: 2.5px solid transparent; transition: all .2s; }
-nav a:hover, nav a.active { color: var(--teal); border-bottom-color: var(--teal); }
-
-/* ── HERO ── */
-.hero { background: linear-gradient(135deg,#fce8f0 0%,#f8d7e8 30%,#fde8d4 65%,#e8f4f8 100%); display: grid; grid-template-columns: 1fr 1fr 1fr; min-height: 360px; overflow: hidden; padding: 0 40px; }
-.hero-left { display: flex; flex-direction: column; justify-content: center; gap: 18px; padding: 40px 0; }
-.hero-left h1 { font-size: 32px; font-weight: 700; line-height: 1.3; }
-.btn-more { background: var(--green); color: white; border-radius: 24px; padding: 11px 28px; font-weight: 600; font-size: 14px; border: none; cursor: pointer; width: fit-content; }
-.hero-center { display: flex; align-items: center; justify-content: center; position: relative; }
-.hero-img { width: 220px; height: 260px; background: linear-gradient(160deg,#f8b4cc,#f5d0be); border-radius: 50% 50% 48% 52%/60% 60% 40% 40%; display: flex; align-items: center; justify-content: center; font-size: 90px; box-shadow: 0 8px 32px rgba(200,80,120,.18); }
-.heart { position: absolute; font-size: 22px; animation: float 3s ease-in-out infinite; }
-.heart:nth-child(1){top:40px;left:30px;animation-delay:0s}
-.heart:nth-child(2){top:60px;right:20px;animation-delay:1s}
-.heart:nth-child(3){bottom:60px;left:20px;animation-delay:2s}
-@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-.hero-right { display: flex; flex-direction: column; justify-content: center; padding: 30px 20px; }
-.vinmec-badge { background: white; border-radius: 12px; padding: 16px 20px; box-shadow: 0 4px 20px rgba(0,0,0,.1); }
-.badge-title { font-size: 20px; font-weight: 800; color: var(--teal-dark); letter-spacing: 1px; }
-.badge-sub { font-size: 9px; color: var(--gold); letter-spacing: 2px; font-weight: 600; }
-.promo-text { font-family: Georgia,serif; font-style: italic; font-size: 28px; color: #d4507a; font-weight: 700; margin-top: 8px; line-height: 1.2; }
-.promo-sub { font-size: 14px; color: var(--teal); font-weight: 600; margin-top: 4px; }
-.btn-consult { margin-top: 12px; background: var(--teal-dark); color: white; border: none; border-radius: 20px; padding: 10px 20px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
-.quick-actions { background: white; display: grid; grid-template-columns: repeat(3,1fr); border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,.1); margin: -28px 40px 0; position: relative; z-index: 10; overflow: hidden; border: 1px solid var(--gray-100); }
-.qa-item { display: flex; align-items: flex-start; gap: 14px; padding: 20px 24px; border-right: 1px solid var(--gray-100); cursor: pointer; transition: background .2s; }
-.qa-item:last-child { border-right: none; }
-.qa-item:hover { background: var(--teal-light); }
-.qa-icon { font-size: 22px; color: var(--teal); }
-.qa-title { font-size: 14px; font-weight: 700; }
-.qa-sub { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
-.content-section { padding: 60px 40px 100px; max-width: 1200px; margin: 0 auto; }
-.section-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
-.section-underline { width: 40px; height: 3px; background: var(--teal); border-radius: 2px; margin-bottom: 32px; }
-
-/* ── FAB ── */
-.chatbot-fab { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
-.chatbot-tooltip { background: var(--gray-800); color: white; font-size: 12px; padding: 8px 14px; border-radius: 20px; white-space: nowrap; box-shadow: 0 4px 14px rgba(0,0,0,.2); }
-.chatbot-btn { width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg,var(--teal),var(--teal-dark)); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 20px rgba(0,116,138,.4); transition: transform .2s; position: relative; }
-.chatbot-btn:hover { transform: scale(1.08); }
-.chatbot-ping { position: absolute; top: -2px; right: -2px; width: 13px; height: 13px; background: var(--red); border-radius: 50%; border: 2px solid white; animation: ping 1.5s ease-in-out infinite; }
-@keyframes ping { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:.7} }
-
-/* ── CHAT WINDOW – compact + fullscreen ── */
-.chatbot-window {
-  position: fixed;
-  bottom: 86px; right: 24px;
-  z-index: 999;
-  width: 380px;
-  height: 560px;
-  max-height: calc(100vh - 170px);
-  background: white;
-  border-radius: 18px;
-  box-shadow: 0 16px 48px rgba(0,0,0,.16), 0 4px 16px rgba(0,116,138,.14);
-  display: none;
-  flex-direction: column;
-  overflow: hidden;
-  transition: width .25s ease, height .25s ease, border-radius .25s ease,
-              top .25s ease, left .25s ease, bottom .25s ease, right .25s ease;
-}
-/* Fullscreen */
-.chatbot-window.fullscreen {
-  top: 0; left: 0; bottom: 0; right: 0;
-  width: 100vw; height: 100vh;
-  max-height: 100vh;
-  border-radius: 0;
-  box-shadow: none;
-}
-@keyframes slideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-
-/* Header */
-.chat-header { background: linear-gradient(135deg,var(--teal-dark),var(--teal)); padding: 12px 14px; display: flex; align-items: center; gap: 10px; color: white; flex-shrink: 0; }
-.chat-avatar { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,.2); border: 2px solid rgba(255,255,255,.4); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-.chat-header-info { flex: 1; min-width: 0; }
-.chat-header-info h3 { font-size: 13.5px; font-weight: 700; }
-.chat-status { display: flex; align-items: center; gap: 4px; font-size: 10.5px; opacity: .9; margin-top: 1px; }
-.status-dot { width: 6px; height: 6px; background: #4ade80; border-radius: 50%; flex-shrink: 0; transition: background .3s; }
-.header-btns { display: flex; gap: 5px; flex-shrink: 0; }
-.icon-btn { background: rgba(255,255,255,.15); border: none; color: white; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; transition: background .15s; }
-.icon-btn:hover { background: rgba(255,255,255,.3); }
-
-/* Topic bar */
-.chat-topic-bar { background: var(--teal-light); padding: 6px 12px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #c8e9ef; flex-shrink: 0; }
-.topic-badge { background: var(--teal); color: white; font-size: 10px; font-weight: 700; padding: 2px 9px; border-radius: 20px; white-space: nowrap; }
-.topic-label { font-size: 10.5px; color: var(--teal-dark); font-weight: 500; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-/* Messages */
-.chat-messages { flex: 1; overflow-y: auto; padding: 12px 10px; display: flex; flex-direction: column; gap: 9px; background: #f8fbfc; min-height: 0; }
-.chat-messages::-webkit-scrollbar { width: 3px; }
-.chat-messages::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 4px; }
-/* Fullscreen: wider messages */
-.fullscreen .chat-messages { padding: 16px calc(50% - 340px); }
-
-/* Bubbles */
-.msg { display: flex; gap: 7px; align-items: flex-end; }
-.msg.bot { justify-content: flex-start; }
-.msg.user { justify-content: flex-end; }
-.msg-av { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg,var(--teal-dark),var(--teal)); display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
-.bubble { max-width: 86%; padding: 9px 12px; border-radius: 15px; font-size: 13px; line-height: 1.56; }
-.bubble.bot { background: white; border: 1px solid var(--gray-200); border-bottom-left-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,.06); }
-.bubble.user { background: linear-gradient(135deg,var(--teal-dark),var(--teal)); color: white; border-bottom-right-radius: 4px; }
-.bubble.success { background: #f0fdf4; border-color: #bbf7d0; border-left: 3px solid var(--green); }
-.bubble.warning { background: #fff7ed; border-color: #fed7aa; border-left: 3px solid var(--orange); }
-.bubble.redirect { background: #fef2f2; border-color: #fecaca; border-left: 3px solid var(--red); }
-.bubble.booking { background: #f0f9ff; border-color: #bae6fd; border-left: 3px solid #0ea5e9; }
-.bubble-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 4px; opacity: .7; }
-.bubble.success .bubble-label { color: var(--green); }
-.bubble.warning .bubble-label  { color: var(--orange); }
-.bubble.redirect .bubble-label { color: var(--red); }
-.bubble.booking .bubble-label  { color: #0369a1; }
-
-/* Policy tags */
-.policy-tag { display: inline-flex; align-items: center; gap: 3px; background: var(--teal-light); color: var(--teal-dark); font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 10px; margin-top: 5px; margin-right: 3px; }
-
-/* Price table */
-.price-block { background: linear-gradient(135deg,#00748a12,#00536e0c); border: 1px solid #00748a28; border-radius: 9px; padding: 8px 11px; margin-top: 7px; }
-.price-row { display: flex; justify-content: space-between; align-items: center; padding: 2px 0; }
-.price-label { font-size: 11.5px; color: var(--gray-600); }
-.price-val { font-size: 12.5px; font-weight: 700; color: var(--teal-dark); }
-
-/* Quick replies */
-.quick-replies { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
-.qr-btn { background: white; border: 1.5px solid var(--teal); color: var(--teal); border-radius: 14px; padding: 5px 11px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; font-family: inherit; text-align: left; line-height: 1.3; }
-.qr-btn:hover { background: var(--teal); color: white; }
-.qr-btn:active { transform: scale(.96); }
-
-/* CTA */
-.chat-cta { display: flex; gap: 7px; margin-top: 7px; flex-wrap: wrap; }
-.cta-primary { background: var(--teal-dark); color: white; border: none; border-radius: 11px; padding: 6px 12px; font-size: 11.5px; font-weight: 600; cursor: pointer; font-family: inherit; transition: background .15s; }
-.cta-primary:hover { background: var(--teal); }
-.cta-secondary { background: white; color: var(--teal); border: 1.5px solid var(--teal); border-radius: 11px; padding: 6px 12px; font-size: 11.5px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .15s; }
-.cta-secondary:hover { background: var(--teal-light); }
-
-/* Feedback */
-.feedback-row { display: flex; align-items: center; gap: 7px; margin-top: 7px; padding-top: 7px; border-top: 1px solid var(--gray-100); }
-.feedback-lbl { font-size: 10.5px; color: var(--gray-400); }
-.fb-btn { background: none; border: 1px solid var(--gray-200); border-radius: 7px; padding: 2px 9px; font-size: 11.5px; cursor: pointer; transition: all .15s; font-family: inherit; }
-.fb-btn:hover { border-color: var(--teal); color: var(--teal); }
-.fb-btn.wrong:hover { border-color: var(--red); color: var(--red); }
-
-/* Clarify */
-.clarify-form { background: var(--purple-light); border: 1px solid var(--purple-border); border-radius: 11px; padding: 9px; margin-top: 7px; }
-.clarify-lbl { font-size: 10.5px; color: var(--purple); font-weight: 700; margin-bottom: 5px; display: block; }
-.clarify-options { display: flex; flex-direction: column; gap: 4px; }
-.clarify-opt { background: white; border: 1.5px solid var(--purple-border); color: var(--purple); border-radius: 8px; padding: 5px 11px; font-size: 11.5px; font-weight: 500; cursor: pointer; text-align: left; font-family: inherit; transition: all .15s; }
-.clarify-opt:hover { background: var(--purple); color: white; border-color: var(--purple); }
-
-/* Option cards */
-.option-card { display: flex; align-items: center; gap: 9px; background: white; border-radius: 9px; padding: 8px 11px; cursor: pointer; margin-top: 5px; transition: opacity .15s; }
-.option-card:hover { opacity: .82; }
-.option-card.red { border: 1px solid #fecaca; }
-.option-card.orange { border: 1px solid #fed7aa; }
-.oc-icon { font-size: 17px; flex-shrink: 0; }
-.oc-label { font-size: 12px; font-weight: 700; }
-.option-card.red .oc-label { color: #991b1b; }
-.option-card.orange .oc-label { color: #9a3412; }
-.oc-sub { font-size: 10.5px; color: var(--gray-400); }
-
-/* Log notice */
-.log-notice { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 9px; padding: 9px 11px; margin-top: 5px; font-size: 11px; color: #9a3412; display: flex; gap: 7px; }
-
-/* ── BOOKING FORM ── */
-.booking-form {
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
-  border-radius: 12px;
-  padding: 12px;
-  margin-top: 8px;
-}
-.booking-step-title {
-  font-size: 11px; font-weight: 700; color: #0369a1;
-  margin-bottom: 8px; display: flex; align-items: center; gap: 5px;
-}
-.booking-progress {
-  display: flex; gap: 4px; margin-bottom: 10px;
-}
-.bp-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: #bae6fd; flex-shrink: 0;
-  transition: background .2s;
-}
-.bp-dot.done  { background: var(--green); }
-.bp-dot.active{ background: #0ea5e9; }
-/* Text input trong booking */
-.booking-input {
-  width: 100%;
-  border: 1.5px solid #bae6fd;
-  border-radius: 9px;
-  padding: 7px 11px;
-  font-size: 12.5px;
-  font-family: inherit;
-  outline: none;
-  background: white;
-  transition: border-color .2s;
-}
-.booking-input:focus { border-color: #0ea5e9; }
-.booking-input::placeholder { color: var(--gray-400); }
-/* Nút submit bước */
-.booking-next-btn {
-  margin-top: 7px;
-  background: #0ea5e9; color: white;
-  border: none; border-radius: 9px;
-  padding: 7px 18px;
-  font-size: 12px; font-weight: 700;
-  cursor: pointer; font-family: inherit;
-  transition: background .15s;
-}
-.booking-next-btn:hover { background: #0284c7; }
-/* Lựa chọn cơ sở */
-.facility-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 5px; }
-.facility-btn {
-  background: white; border: 1.5px solid #bae6fd;
-  color: #0369a1; border-radius: 9px;
-  padding: 6px 8px; font-size: 11.5px; font-weight: 600;
-  cursor: pointer; text-align: center; font-family: inherit;
-  transition: all .15s;
-}
-.facility-btn:hover { background: #0ea5e9; color: white; border-color: #0ea5e9; }
-/* Card xác nhận */
-.booking-confirm-card {
-  background: white; border: 1px solid #bae6fd;
-  border-radius: 10px; padding: 10px 12px; margin-top: 8px;
-}
-.confirm-row { display: flex; gap: 6px; padding: 3px 0; font-size: 12px; }
-.confirm-key { color: var(--gray-400); width: 70px; flex-shrink: 0; }
-.confirm-val { font-weight: 600; color: var(--gray-800); }
-.booking-btn-row { display: flex; gap: 7px; margin-top: 9px; }
-.booking-confirm-btn {
-  background: var(--green); color: white; border: none;
-  border-radius: 9px; padding: 7px 16px;
-  font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit;
-}
-.booking-edit-btn {
-  background: white; color: var(--gray-600);
-  border: 1.5px solid var(--gray-200); border-radius: 9px;
-  padding: 7px 12px; font-size: 12px; font-weight: 600;
-  cursor: pointer; font-family: inherit;
-}
-
-/* Typing */
-.typing-indicator { display: flex; align-items: center; gap: 4px; padding: 7px 11px; }
-.typing-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gray-400); animation: typing 1.2s ease-in-out infinite; }
-.typing-dot:nth-child(2){animation-delay:.2s}
-.typing-dot:nth-child(3){animation-delay:.4s}
-@keyframes typing { 0%,100%{transform:translateY(0);opacity:.5} 50%{transform:translateY(-4px);opacity:1} }
-
-.msg-time { font-size: 10px; color: var(--gray-400); text-align: center; width: 100%; margin: 1px 0; }
-
-/* Input area */
-.chat-input-area { padding: 9px 10px; background: white; border-top: 1px solid var(--gray-100); display: flex; gap: 7px; align-items: flex-end; flex-shrink: 0; }
-.fullscreen .chat-input-area { padding: 12px calc(50% - 340px); }
-.chat-input { flex: 1; border: 1.5px solid var(--gray-200); border-radius: 18px; padding: 7px 13px; font-size: 13px; font-family: inherit; outline: none; resize: none; max-height: 72px; min-height: 34px; transition: border-color .2s; line-height: 1.4; }
-.chat-input:focus { border-color: var(--teal); }
-.send-btn { width: 34px; height: 34px; border-radius: 50%; background: var(--teal); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; font-size: 15px; flex-shrink: 0; transition: background .2s; }
-.send-btn:hover { background: var(--teal-dark); }
-.send-btn:disabled { background: var(--gray-200); cursor: not-allowed; }
-
-.chat-footer { background: var(--gray-50); padding: 4px 12px; font-size: 9.5px; color: var(--gray-400); text-align: center; border-top: 1px solid var(--gray-100); flex-shrink: 0; }
-
-/* Toast */
-.toast { position: fixed; bottom: 96px; right: 24px; z-index: 2000; background: var(--gray-800); color: white; font-size: 12px; padding: 9px 15px; border-radius: 11px; box-shadow: 0 4px 14px rgba(0,0,0,.2); opacity: 0; transition: opacity .3s; pointer-events: none; }
-.toast.show { opacity: 1; }
-.toast.ok  { background: #166534; }
-.toast.err { background: #991b1b; }
-
-@media(max-width:600px){
-  .chatbot-window:not(.fullscreen){ width:calc(100vw - 20px); right:10px; bottom:80px; max-height:calc(100vh - 140px); }
-  .hero{ grid-template-columns:1fr; }
-  .hero-center,.hero-right{ display:none; }
-  .quick-actions{ grid-template-columns:1fr; margin:10px 20px 0; }
-}
-</style>
+<link rel="stylesheet" href="./styles.css">
 </head>
 <body>
 
@@ -309,12 +16,12 @@ nav a:hover, nav a.active { color: var(--teal); border-bottom-color: var(--teal)
 
 <header class="main-header">
   <div class="logo">
-    <span style="font-size:20px;color:var(--gold)">🦅</span>
+    <span class="logo-icon">🦅</span>
     <div><div class="logo-text">VINMEC</div><div class="logo-sub">HEALTHCARE SYSTEM</div></div>
   </div>
   <div class="search-bar"><span>🔍</span> Tìm kiếm...</div>
   <div class="header-actions">
-    <button class="btn-calendar">📅 Đặt lịch</button>
+    <button class="btn-calendar" type="button">📅 Đặt lịch</button>
     <div class="flag-badge">🇻🇳 ▾</div>
   </div>
 </header>
@@ -330,23 +37,23 @@ nav a:hover, nav a.active { color: var(--teal); border-bottom-color: var(--teal)
 <section class="hero">
   <div class="hero-left">
     <h1>Chăm sóc bằng tài năng,<br>y đức và sự thấu cảm</h1>
-    <button class="btn-more">Xem thêm</button>
+    <button class="btn-more" type="button">Xem thêm</button>
   </div>
   <div class="hero-center">
-    <div style="position:relative">
+    <div class="hero-figure">
       <div class="hero-img">👩‍🍼</div>
       <span class="heart">💗</span><span class="heart">💖</span><span class="heart">💝</span>
     </div>
   </div>
   <div class="hero-right">
     <div class="vinmec-badge">
-      <div style="display:flex;align-items:center;gap:6px">
-        <span style="color:var(--gold);font-size:18px">🦅</span>
+      <div class="badge-brand">
+        <span class="badge-brand-icon">🦅</span>
         <div><div class="badge-title">VINMEC</div><div class="badge-sub">HEALTHCARE SYSTEM</div></div>
       </div>
       <div class="promo-text">Ở cữ An nhiên</div>
       <div class="promo-sub">Mẹ khỏe, bé ngoan</div>
-      <button class="btn-consult" onclick="openChat()">NHẬN TƯ VẤN NGAY</button>
+      <button class="btn-consult" type="button" onclick="openChat()">NHẬN TƯ VẤN NGAY</button>
     </div>
   </div>
 </section>
@@ -360,13 +67,13 @@ nav a:hover, nav a.active { color: var(--teal); border-bottom-color: var(--teal)
 <div class="content-section">
   <h2 class="section-title">Tại sao nên chọn Vinmec?</h2>
   <div class="section-underline"></div>
-  <p style="color:var(--gray-400);font-size:13.5px;max-width:600px">Vinmec là hệ thống y tế đa chuyên khoa với đội ngũ bác sĩ giỏi, trang thiết bị hiện đại và dịch vụ chăm sóc toàn diện.</p>
+  <p class="content-lead">Vinmec là hệ thống y tế đa chuyên khoa với đội ngũ bác sĩ giỏi, trang thiết bị hiện đại và dịch vụ chăm sóc toàn diện.</p>
 </div>
 
 <!-- FAB -->
 <div class="chatbot-fab">
   <div class="chatbot-tooltip" id="chatTooltip">💬 Hỏi về gói thai sản</div>
-  <button class="chatbot-btn" onclick="toggleChat()">
+  <button class="chatbot-btn" type="button" onclick="toggleChat()">
     💬<div class="chatbot-ping"></div>
   </button>
 </div>
@@ -384,9 +91,9 @@ nav a:hover, nav a.active { color: var(--teal); border-bottom-color: var(--teal)
       </div>
     </div>
     <div class="header-btns">
-      <button class="icon-btn" onclick="toggleFullscreen()" id="fsBtn" title="Toàn màn hình">⛶</button>
-      <button class="icon-btn" onclick="resetConversation()" title="Cuộc trò chuyện mới">🔄</button>
-      <button class="icon-btn" onclick="toggleChat()" title="Đóng">✕</button>
+      <button class="icon-btn" type="button" onclick="toggleFullscreen()" id="fsBtn" title="Toàn màn hình" aria-label="Toàn màn hình">⛶</button>
+      <button class="icon-btn" type="button" onclick="resetConversation()" title="Cuộc trò chuyện mới">🔄</button>
+      <button class="icon-btn" type="button" onclick="toggleChat()" title="Đóng">✕</button>
     </div>
   </div>
 
@@ -396,14 +103,14 @@ nav a:hover, nav a.active { color: var(--teal); border-bottom-color: var(--teal)
   </div>
 
   <div class="chat-messages" id="chatMessages">
-    <div id="scrollAnchor" style="height:1px"></div>
+    <div id="scrollAnchor"></div>
   </div>
 
   <div class="chat-input-area">
     <textarea class="chat-input" id="chatInput"
       placeholder="Nhập câu hỏi của bạn..." rows="1"
       onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-    <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+    <button class="send-btn" id="sendBtn" type="button" onclick="sendMessage()">➤</button>
   </div>
 
   <div class="chat-footer">🔒 Agent AI · Vinmec Knowledge Base · Dữ liệu demo</div>
@@ -484,7 +191,7 @@ function renderBookingStep() {
     formHtml = `
       <div class="facility-grid">
         ${FACILITIES.map(f =>
-          `<button class="facility-btn" data-facility="${escAttr(f)}">${f}</button>`
+          `<button class="facility-btn" type="button" data-facility="${escAttr(f)}">${f}</button>`
         ).join('')}
       </div>`;
   } else if (step === 'confirm') {
@@ -503,18 +210,18 @@ function renderBookingStep() {
           </div>`).join('')}
       </div>
       <div class="booking-btn-row">
-        <button class="booking-confirm-btn" id="bookingSubmitBtn">✅ Xác nhận đặt lịch</button>
-        <button class="booking-edit-btn" id="bookingEditBtn">✏️ Sửa lại</button>
+        <button class="booking-confirm-btn" id="bookingSubmitBtn" type="button">✅ Xác nhận đặt lịch</button>
+        <button class="booking-edit-btn" id="bookingEditBtn" type="button">✏️ Sửa lại</button>
       </div>`;
   } else {
     formHtml = `
       <input class="booking-input" id="bookingInput" type="${s.type}"
         placeholder="${escAttr(s.placeholder)}" autocomplete="off" />
-      <button class="booking-next-btn" id="bookingNextBtn">
+      <button class="booking-next-btn" id="bookingNextBtn" type="button">
         ${step === 'note' ? 'Tiếp theo →' : 'Tiếp theo →'}
       </button>
       ${step === 'note'
-        ? `<button class="booking-edit-btn" id="bookingSkipBtn" style="margin-left:5px">Bỏ qua</button>`
+        ? `<button class="booking-edit-btn booking-skip-btn" id="bookingSkipBtn" type="button">Bỏ qua</button>`
         : ''}`;
   }
 
@@ -609,6 +316,7 @@ async function bookingSubmit() {
       }),
     });
 
+    const submittedBooking = { ...booking.data };
     const data = await res.json();
     document.querySelector('#booking-bubble')?.remove();
     bookingReset();
@@ -616,7 +324,7 @@ async function bookingSubmit() {
     renderBot({
       type: 'success',
       text: `✅ <b>Đặt lịch thành công!</b><br>Mã đặt lịch: <b>#${data.booking_id}</b>`,
-      extra_text: `Tư vấn viên Vinmec sẽ liên hệ chị qua số <b>${booking.data?.phone || 'đã đăng ký'}</b> trong vòng <b>24 giờ</b> làm việc.<br><br>Cảm ơn chị đã tin tưởng Vinmec! 💙`,
+      extra_text: `Tư vấn viên Vinmec sẽ liên hệ chị qua số <b>${submittedBooking.phone || 'đã đăng ký'}</b> trong vòng <b>24 giờ</b> làm việc.<br><br>Cảm ơn chị đã tin tưởng Vinmec! 💙`,
     });
     showToast('📅 Đặt lịch thành công!', 'ok');
 
@@ -635,6 +343,7 @@ async function bookingSubmit() {
 // INIT
 // ═══════════════════════════════════════════════════════════════════════════
 window.addEventListener('DOMContentLoaded', () => {
+  updateFullscreenButton();
   setTimeout(() => {
     const t = document.getElementById('chatTooltip');
     t.style.transition = 'opacity .5s';
@@ -668,18 +377,25 @@ function toggleFullscreen() {
   isFullscreen ? exitFullscreen() : enterFullscreen();
 }
 
+function updateFullscreenButton() {
+  const btn = document.getElementById('fsBtn');
+  if (!btn) return;
+
+  btn.textContent = isFullscreen ? '❐' : '⛶';
+  btn.title = isFullscreen ? 'Thu nhỏ' : 'Toàn màn hình';
+  btn.setAttribute('aria-label', btn.title);
+}
+
 function enterFullscreen() {
   isFullscreen = true;
   document.getElementById('chatWindow').classList.add('fullscreen');
-  document.getElementById('fsBtn').textContent = '⊠';
-  document.getElementById('fsBtn').title = 'Thu nhỏ';
+  updateFullscreenButton();
 }
 
 function exitFullscreen() {
   isFullscreen = false;
   document.getElementById('chatWindow').classList.remove('fullscreen');
-  document.getElementById('fsBtn').textContent = '⛶';
-  document.getElementById('fsBtn').title = 'Toàn màn hình';
+  updateFullscreenButton();
 }
 
 // Phím Escape thoát fullscreen
@@ -707,10 +423,7 @@ async function loadWelcome() {
       quick_replies: [
         '💰 Gói 27 tuần giá bao nhiêu?',
         '📦 So sánh gói 27 và 36 tuần',
-        '🏥 Chi phí sinh thường bao nhiêu?',
-        '🔪 Chi phí sinh mổ lần 2?',
-        '🎁 Ưu đãi tháng 4 có gì?',
-        '📅 Đặt lịch tư vấn',
+        '🔒 Quyền lợi bảo hiểm',
       ],
     });
   }
@@ -722,7 +435,7 @@ async function resetConversation() {
   bookingReset();
   sessionId = newId();
   localStorage.setItem('vinmec_session', sessionId);
-  document.getElementById('chatMessages').innerHTML = '<div id="scrollAnchor" style="height:1px"></div>';
+  document.getElementById('chatMessages').innerHTML = '<div id="scrollAnchor"></div>';
   try {
     await fetch(`${API_BASE}/api/reset`, {
       method: 'POST',
@@ -730,7 +443,6 @@ async function resetConversation() {
       body: JSON.stringify({ session_id: sessionId }),
     });
   } catch { /* offline */ }
-  appendTime();
   loadWelcome();
   showToast('🔄 Đã bắt đầu cuộc trò chuyện mới');
 }
@@ -840,7 +552,7 @@ function renderBot(msg) {
   if (msg.text)         html += `<div>${msg.text}</div>`;
 
   if (msg.policy_tags?.length) {
-    html += `<div style="margin-top:6px">`;
+    html += `<div class="policy-tag-group">`;
     msg.policy_tags.forEach(pid => { html += `<span class="policy-tag">📋 ${escHtml(pid)}</span>`; });
     html += `</div>`;
   }
@@ -853,35 +565,35 @@ function renderBot(msg) {
     html += `</div>`;
   }
 
-  if (msg.extra_text) html += `<div style="margin-top:7px;font-size:12px">${msg.extra_text}</div>`;
+  if (msg.extra_text) html += `<div class="message-extra-text">${msg.extra_text}</div>`;
 
   if (msg.quick_replies?.length) {
     html += `<div class="quick-replies">`;
     msg.quick_replies.forEach(qr => {
-      html += `<button class="qr-btn" data-qr="${escAttr(qr)}">${escHtml(qr)}</button>`;
+      html += `<button class="qr-btn" type="button" data-qr="${escAttr(qr)}">${escHtml(qr)}</button>`;
     });
     html += `</div>`;
   }
 
   if (msg.cta) {
     html += `<div class="chat-cta">`;
-    if (msg.cta.primary)   html += `<button class="cta-primary" data-cta="${escAttr(msg.cta.primary)}">${escHtml(msg.cta.primary)}</button>`;
-    if (msg.cta.secondary) html += `<button class="cta-secondary" data-cta="${escAttr(msg.cta.secondary)}">${escHtml(msg.cta.secondary)}</button>`;
+    if (msg.cta.primary)   html += `<button class="cta-primary" type="button" data-cta="${escAttr(msg.cta.primary)}">${escHtml(msg.cta.primary)}</button>`;
+    if (msg.cta.secondary) html += `<button class="cta-secondary" type="button" data-cta="${escAttr(msg.cta.secondary)}">${escHtml(msg.cta.secondary)}</button>`;
     html += `</div>`;
   }
 
   if (msg.has_feedback) {
     html += `<div class="feedback-row" data-feedback="${escAttr(JSON.stringify(feedbackContext))}">
       <span class="feedback-lbl">Thông tin có hữu ích không?</span>
-      <button class="fb-btn" data-fb="good">👍 Đúng</button>
-      <button class="fb-btn wrong" data-fb="bad">👎 Sai</button>
+      <button class="fb-btn" type="button" data-fb="good">👍 Đúng</button>
+      <button class="fb-btn wrong" type="button" data-fb="bad">👎 Sai</button>
     </div>`;
   }
 
   if (msg.type === 'clarify' && msg.clarify_options?.length) {
     html += `<div class="clarify-form"><span class="clarify-lbl">Chị có thể cho em biết thêm:</span><div class="clarify-options">`;
     msg.clarify_options.forEach(opt => {
-      html += `<button class="clarify-opt" data-qr="${escAttr(opt)}">${escHtml(opt)}</button>`;
+      html += `<button class="clarify-opt" type="button" data-qr="${escAttr(opt)}">${escHtml(opt)}</button>`;
     });
     html += `</div></div>`;
   }
@@ -943,7 +655,7 @@ function ctaClick(label) {
   const wrap = document.createElement('div');
   wrap.className = 'msg bot';
   wrap.innerHTML = `<div class="msg-av">🤖</div>
-    <div class="bubble bot" style="font-size:12px">
+    <div class="bubble bot bubble-note">
       Đã ghi nhận "<b>${escHtml(label)}</b>". Tư vấn viên sẽ liên hệ chị sớm nhất! 👋
     </div>`;
   animateIn(wrap);
