@@ -224,3 +224,12 @@ async def list_sessions():
         "count": len(SESSIONS),
         "session_ids": list(SESSIONS.keys()),
     }
+
+
+@app.get("/{file_path:path}")
+async def frontend_asset(file_path: str):
+    """Serve frontend assets like styles.css from the project frontend folder."""
+    asset_path = Path(FRONTEND_DIR) / file_path
+    if asset_path.is_file():
+        return FileResponse(asset_path)
+    raise HTTPException(status_code=404, detail="Not Found")
